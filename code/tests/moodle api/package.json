@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "moodle-client": "^0.5.2"
+  }
+}

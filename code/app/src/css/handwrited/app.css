@@ -1,0 +1,294 @@
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+@import "tailwindcss/components";
+
+/* Override rem size */
+
+:root {
+    font-size: 11.2px;
+}
+
+/* Variables */
+
+:root {
+    --color-900: #0b0e11;
+    --color-800: #151a21;
+    --color-700: #242c37;
+    --color-600: #323d4d;
+    --color-300: #5d7290;
+    --color-200: #b2bdcd;
+    --color-100: #dee3ea;
+
+    --color-accent: #49b583;
+
+    --color-900-dark: #0b0e11;
+    --color-800-dark: #151a21;
+    --color-700-dark: #242c37;
+    --color-600-dark: #323d4d;
+    --color-300-dark: #5d7290;
+    --color-200-dark: #b2bdcd;
+    --color-100-dark: #dee3ea;
+
+    --color-900-light: #f0f2f6;
+    --color-800-light: #f4f6fa;
+    --color-700-light: #fefefe;
+    --color-600-light: #d9e0ed;
+    --color-300-light: #89909d;
+    --color-200-light: #89909d;
+    --color-100-light: #19181f;
+
+    --color-accent-1: #49b583;
+    --color-accent-2: #fd6868;
+    --color-accent-3: #5575e7;
+
+    --transition-duration: 300ms;
+}
+
+/* Body */
+
+body {
+    font-family: "Poppins", sans-serif;
+    overscroll-behavior-y: contain;
+    background-color: var(--color-900);
+    overflow: hidden;
+}
+
+/* General style */
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+p, h1, h2 {
+    margin: 0px;
+    padding: 0px;
+    color: var(--color-100);
+    user-select: none;
+}
+
+img {
+    user-select: none;
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+/* General boxes */
+
+.box {
+    height: calc(100% - 5rem);
+    overflow-x: hidden;
+}
+
+/* Bottom menu */
+
+.bottom-menu {
+    background-color: var(--color-900);
+    border-top: 0.1px solid var(--color-300);
+    height: 5rem;
+}
+
+/* Loader */
+
+.ring-loader {
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-top: 0.4rem;
+    margin-right: 0.4rem;
+    border-radius: 100%;
+}
+
+.ring-loader div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0.6rem solid var(--color-100);
+    border-radius: 100%;
+    border-color: var(--color-100) var(--color-700) var(--color-700) var(--color-700);
+}
+
+/* Box loading */
+
+.box-loading::after {
+    content: "";
+    position: absolute;
+    background: linear-gradient(90deg, transparent, var(--color-900), transparent);
+    opacity: 0.7;
+    width: 50%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: skewX(-10deg); left: -50% }
+    100% { transform: skewX(-10deg); left: 100%; }
+}
+
+/* Plannng point and bar */
+
+.planning-point {
+    height: 11px;
+    width: 11px;
+    border: 2px solid var(--color-900);
+    box-shadow: 0px 0px 0px 2px var(--color-accent);
+    box-sizing: border-box;
+    margin-top: 4px;
+    margin-left: -3px;
+}
+
+.planning-bar {
+    height: calc(100% - 35px);
+    margin-top: 23px;
+    margin-left: -7px;
+    width: 3px;
+    border-radius: 9999px;
+}
+
+/* Toggle button */
+
+input[type="checkbox"]:checked ~ span {
+    background-color: var(--color-accent);
+}
+
+input[type="checkbox"] ~ span {
+    background-color: var(--color-600);
+}
+
+input[type="checkbox"] ~ span:after {
+    background-color: var(--color-100);
+}
+
+/* Information content */
+
+.information-content h1 {
+    font-weight: 500;
+    color: var(--color-100);
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.information-content p {
+    margin-top: 5px;
+    font-size: 1.375rem;
+    line-height: 1.875rem;
+    text-align: justify;
+}
+
+/* Used to apply the box shadow based on the current color theme */
+
+.event-box-shadow::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    top: 5px;
+    left: 5px;
+    background-color: transparent;
+    border-radius: 3px;
+    opacity: 0.7;
+    box-shadow: 0px 0px 0px 10px var(--color-accent);
+}
+
+/* More tailwind-like classes */
+
+.color-accent {
+    color: var(--color-accent);
+}
+
+.color-100 {
+    color: var(--color-100);
+}
+
+.color-200 {
+    color: var(--color-200);
+}
+
+.bg-accent {
+    background-color: var(--color-accent);
+}
+
+.bg-900 {
+    background-color: var(--color-900);
+}
+
+.bg-800 {
+    background-color: var(--color-800);
+}
+
+.bg-700 {
+    background-color: var(--color-700);
+}
+
+.bg-600 {
+    background-color: var(--color-600);
+}
+
+.bg-300 {
+    background-color: var(--color-300);
+}
+
+.bg-200 {
+    background-color: var(--color-200);
+}
+
+.bg-100 {
+    background-color: var(--color-100);
+}
+
+.border-accent {
+    border-color: var(--color-accent);
+}
+
+.border-100 {
+    border-color: var(--color-100);
+}
+
+.text-normalxl {
+    font-size: 1.375rem;
+    line-height: 1.875rem;
+}
+
+/* Used to disable animation if low perf mode is active */
+.duration-300 {
+    transition-duration: var(--transition-duration);
+}
+
+/* Vue style */
+
+[v-cloak] {
+    display: none
+}
+
+/* Scroll bar */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-700);
+    border-radius: 150px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-600);
+}
+
+@media screen and (max-width: 1000px) { 
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+}

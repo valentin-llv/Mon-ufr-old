@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+      "target": "esnext",
+      "watch": true,
+      "removeComments": true,
+      "lib": ["dom", "es2017"],
+      "outDir": "./src/js/compiled",
+  },
+
+  "include": [
+      "./src/js/ts/**/*"
+  ]
+}
