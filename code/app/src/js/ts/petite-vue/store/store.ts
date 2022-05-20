@@ -59,7 +59,7 @@ export default class Store {
                 currentInformation: "",
 
                 infos: [],
-                infosUnseen: 1,
+                infosUnseen: 0,
 
                 errorMessage: "",
                 displayLoader: true,

@@ -19,7 +19,6 @@ export default class InformationsBox {
             InformationsBox._instance = new InformationsBox();
         return InformationsBox._instance;
     }
-    ;
     constructor() {
         this.load();
     }
@@ -38,7 +37,6 @@ export default class InformationsBox {
         }
         this.succes(result);
     }
-    ;
     async loadWithoutInternet(reason) {
         let result = await CacheManager.getInstance().checkCache(this.ressourcesPath, false);
         if (!result) {
@@ -48,13 +46,11 @@ export default class InformationsBox {
         }
         this.succes(result);
     }
-    ;
     succes(result) {
         [this.informations.infos, this.informations.infosUnseen] = this.parse(result.news);
         this.informations.displayLoader = false;
         this.informations.errorMessage = "";
     }
-    ;
     parse(news) {
         let newsRead = DataManager.getInstance().data.news.newsRead;
         let unseen = 0;
@@ -70,5 +66,4 @@ export default class InformationsBox {
         }
         return [parsed, unseen];
     }
-    ;
 }

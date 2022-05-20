@@ -43,6 +43,9 @@ export default class DataManager {
             news: {
                 newsRead: [],
             },
+            planning: {
+                urls: [],
+            },
             settings: {
                 themeColor: "dark",
                 accentColor: "#49b583",

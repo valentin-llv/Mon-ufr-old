@@ -24,12 +24,12 @@ export default class InformationsBox {
         head2: "La connexion au serveur a échoué.",
 
         messageEnd: "Impossible de récupérer les informations.",
-    };
+    }
 
     public static getInstance(): InformationsBox {
         if(!InformationsBox._instance) InformationsBox._instance = new InformationsBox();
         return InformationsBox._instance;
-    };
+    }
 
     constructor() {
         this.load();
@@ -57,7 +57,7 @@ export default class InformationsBox {
 
         // Fill the page with the result data
         this.succes(result);
-    };
+    }
 
     private async loadWithoutInternet(reason: string): Promise<any> {
         let result = await CacheManager.getInstance().checkCache(this.ressourcesPath, false);
@@ -69,14 +69,14 @@ export default class InformationsBox {
         }
         
         this.succes(result);
-    };
+    }
 
     private succes(result) {
         [this.informations.infos, this.informations.infosUnseen] = this.parse(result.news);
 
         this.informations.displayLoader = false;
         this.informations.errorMessage = "";
-    };
+    }
 
     private parse(news) {
         let newsRead = DataManager.getInstance().data.news.newsRead;
@@ -94,5 +94,5 @@ export default class InformationsBox {
         }
 
         return [parsed, unseen];
-    };
+    }
 }

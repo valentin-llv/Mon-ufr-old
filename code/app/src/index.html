@@ -32,6 +32,7 @@
         <!-- start of home page -->
         <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'home-page', pageAnimation: 'fade', hidden: false })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }">
             <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Header start -->
                 <p class="text-3xl font-medium"> Bonjour 👋 </p>
                 <p class="mt-2 text-3xl font-bold">
                     On est le <span class="color-accent" v-scope v-once v-cloak> {{ store.home.date }} </span> 📆, <br />
@@ -49,7 +50,9 @@
                     </svg>
                     <div v-if="store.informations.infosUnseen > 0 && store.informations.infos.length > 0" class="h-4 w-4 bg-accent rounded-full absolute top-0 left-full -ml-6" v-cloak></div>
                 </div>
+                <!-- Header end -->
 
+                <!-- Next class section start -->
                 <p class="text-3xl font-medium mt-10"> Prochain cour </p>
 
                 <div class="relative pb-5 box-border">
@@ -70,7 +73,9 @@
                         </div>
                     </div>
                 </div>
+                <!-- Next class section end -->
 
+                <!-- Reminder section start -->
                 <p class="text-3xl font-medium mt-6"> Vous avez <span class="color-accent"> 1 rappel </span> </p>
 
                 <div class="relative pb-5 box-border">
@@ -82,10 +87,12 @@
                         <p class="flex-1 text-2xl font-medium m-auto ml-5"> Nouvelle mise à jour </p>
                     </div>
                 </div>
+                <!-- Reminder section end -->
 
-                <p class="text-3xl font-medium mt-6" v-if="store.informations.infosUnseen > 0 && !store.informations.errorMessage"> Informations </p>
+                <!-- Information section start -->
+                <p class="text-3xl font-medium mt-6" v-if="store.informations.infosUnseen > 0 || store.informations.displayLoader"> Informations </p>
 
-                <div class="relative pb-5 box-border" v-if="store.informations.infos.length && store.informations.infosUnseen > 0" v-cloak>
+                <div class="relative pb-5 box-border" v-if="store.informations.infosUnseen > 0" v-cloak>
                     <template v-for="(info, index) in store.informations.infos">
                         <div class="relative mt-5 p-5 rounded-lg bg-accent event-box-shadow flex flex-row cursor-pointer" v-show="info.isUnseen" @click="infosBoxClicked(index)">
                             <svg class="w-12 h-12 m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M368 415.86V72a24.07 24.07 0 00-24-24H72a24.07 24.07 0 00-24 24v352a40.12 40.12 0 0040 40h328" fill="none" stroke="var(--color-100)" stroke-linejoin="round" stroke-width="32"/>
@@ -102,7 +109,7 @@
                     </template>
                 </div>
 
-                <div class="relative pb-5 box-border" v-if="!store.informations.infos.length && !store.informations.errorMessage">
+                <div class="relative pb-5 box-border" v-if="store.informations.displayLoader">
                     <div class="box-loading relative mt-5 p-5 rounded-lg bg-800 flex flex-row cursor-pointer">
                         <svg class="w-12 h-12 m-auto opacity-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M368 415.86V72a24.07 24.07 0 00-24-24H72a24.07 24.07 0 00-24 24v352a40.12 40.12 0 0040 40h328" fill="none" stroke="var(--color-100)" stroke-linejoin="round" stroke-width="32"/>
                             <path d="M416 464h0a48 48 0 01-48-48V128h72a24 24 0 0124 24v264a48 48 0 01-48 48z" fill="none" stroke="var(--color-100)" stroke-linejoin="round" stroke-width="32"/>
@@ -116,7 +123,9 @@
                         </div>
                     </div>
                 </div>
+                <!-- Information section end  -->
 
+                <!-- Mails section start -->
                 <p class="text-3xl font-medium mt-6"> Nouveau mails </p>
 
                 <div class="relative pb-5 box-border">
@@ -154,12 +163,15 @@
                         </div>
                     </div>
                 </div>
+                <!-- Mails section end -->
             </div>
-        </div> <!-- end of home page -->
+        </div> 
+        <!-- end of home page -->
 
         <!-- start of planning page -->
-        <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'planning-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }">
+        <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'planning-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
                 <p class="text-3xl font-bold">
                     Il vous reste <span class="color-accent">4 cours 📗</span> <br /> aujourd'hui&nbsp;!
                 </p>
@@ -168,14 +180,19 @@
                     <path d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z" fill="none" stroke="var(--color-100)" stroke-miterlimit="10" stroke-width="32"/>
                     <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 176v160M336 256H176"/>
                 </svg>
+                <!-- Page header end -->
 
+                <!-- View navigator start -->
                 <div class="flex flex-row pb-5 mt-6 overflow-x-auto">
                     <p class="p-2 pl-5 pr-5 rounded-full border-2 border-100 text-2xl whitespace-nowrap"> Ma semaine </p>
                     <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 border-100 text-2xl whitespace-nowrap"> Mon planning </p>
                     <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 border-100 text-2xl whitespace-nowrap"> Rechercher </p>
                 </div>
+                <!-- View navigator end -->
 
+                <!-- Week view start -->
                 <div class="">
+                    <!-- Current week start -->
                     <div class="flex flex-row -ml-3 mt-6 items-center justify-center">
                         <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
                             <p class="text-lg"> Lun </p>
@@ -212,12 +229,15 @@
                             <p class="text-center text-2xl font-mediusm mt-1"> 1 </p>
                         </div>
                     </div>
+                    <!-- Current week end -->
 
+                    <!-- Date navigator start -->
                     <div class="flex flex-row mt-4">
                         <img class="w-14 h-14 m-auto" src="assets/icons/arrow-back.svg" />
                         <p class="flex-1 m-auto text-center font-medium text-2xl"> Juin 2022 </p>
                         <img class="w-14 h-14 m-auto" src="assets/icons/arrow-forward.svg" />
                     </div>
+                    <!-- Date navigator end -->
 
                     <div class="mt-5 cursor-pointer flex flex-row">
                         <div class="relative">
@@ -270,6 +290,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Week view end -->
 
                 <div class="hidden">
                     <p class="text-3xl font-medium mt-10"> Mardi 10 </p>
@@ -292,11 +313,13 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- end of planning page -->
+        </div> 
+        <!-- end of planning page -->
 
         <!-- start notification page -->
         <div id="notification-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'notification-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
                 <div class="w-full flex flex-row">
                     <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton()" @click="clicked">
                         <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/>
@@ -305,9 +328,12 @@
 
                     <div class="ring-loader animate-spin" v-if="store.informations.displayLoader"><div></div></div>
                 </div>
+                <!-- Page header end -->
 
+                <!-- Notification error message -->
                 <p class="w-10/12 text-center font-medium text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"> {{ store.informations.errorMessage }} </p>
 
+                <!-- Notification element start -->
                 <div class="relative flex flex-col" v-if="store.informations.infos.length">
                     <template v-for="(info, index) in store.informations.infos">
                         <div class="relative mt-5 p-5 box-border rounded-lg bg-800" @click="infosBoxClicked(index)">
@@ -322,7 +348,9 @@
                         </div>
                     </template>
                 </div>
+                <!-- Notification element end -->
 
+                <!-- Notification loader start -->
                 <div class="relative flex flex-col" v-if="!store.informations.infos.length && !store.informations.errorMessage">
                     <template v-for="index in 3">
                         <div class="box-loading relative mt-5 p-5 box-border rounded-lg bg-800">
@@ -335,8 +363,10 @@
                         </div>
                     </template>
                 </div>
+                <!-- Notification loader end -->
             </div>
-        </div> <!-- end notification page -->
+        </div> 
+        <!-- end notification page -->
 
         <!-- start notification content page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'notification-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
@@ -350,7 +380,8 @@
 
                 <div class="information-content mt-5" v-if="store.informations.currentInformation" v-html="store.informations.currentInformation.content"></div>
             </div>
-        </div> <!-- end notification content page -->
+        </div> 
+        <!-- end notification content page -->
 
         <!-- start settings page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'settings-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
@@ -417,7 +448,8 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- end settings page -->
+        </div> 
+        <!-- end settings page -->
 
         <!-- start personalization page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'personalization-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
@@ -446,7 +478,8 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- end mode sombre page -->
+        </div> 
+        <!-- end mode sombre page -->
 
         <!-- start app share page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'app-share-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
@@ -469,10 +502,11 @@
                     <img class="mt-5 rounded-lg bg-white" src="assets/images/qrcode.png" alt="App share QR-code" />
                 </div>
             </div>
-        </div> <!-- end app share page -->
+        </div> 
+        <!-- end app share page -->
 
-         <!-- start app idea page -->
-         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'app-idea-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <!-- start app idea page -->
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'app-idea-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <div class="w-full flex flex-row">
                     <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton()" @click="clicked">
@@ -498,7 +532,8 @@
                     <textarea class="color-100 rounded-lg mt-2.5 p-3 bg-700 text-normalxl resize-none h-40" type="text" placeholder="Message ..."></textarea>
                 </div>
             </div>
-        </div> <!-- end app idea page -->
+        </div> 
+        <!-- end app idea page -->
 
         <!-- start app information page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'app-informations-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
@@ -540,18 +575,19 @@
                     </p>
                 </div>
             </div>
-        </div> <!-- end app information page -->
+        </div> 
+        <!-- end app information page -->
     </div><!-- end of global warper -->
 
     <div class="bottom-menu fixed top-full left-0 -translate-y-full w-full flex flex-row box-border">
-        <div class="element flex-1 m-auto cursor-pointer" v-scope="BottomMenuButton({ pageName: 'home-page', dasharray: 1400, index: 0 })" @click="clicked">
+        <div class="element flex-1 m-auto cursor-pointer" v-scope="BottomMenuButton({ pageName: 'home-page', dasharray: 1400, index: 0 })" @click="clicked" style="stroke: var(--color-accent);">
             <svg v-bind:style="{ strokeDasharray: currentDasharray, strokeDashoffset: currentDashoffset, transition: transitionSpeed, stroke: store.home.menuSelected[index] }" class="relative h-12 aspect-square m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <rect x="48" y="80" width="416" height="272" rx="32" ry="32" fill="none" stroke-linejoin="round" stroke-width="32"/>
                 <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 416v-64M256 80V48M400 464l-32-112M112 464l32-112"/>
             </svg>
         </div>
         
-        <div class="element flex-1 m-auto cursor-pointer" v-scope="BottomMenuButton({ pageName: 'planning-page', dasharray: 1600, index: 1 })" @click="clicked">
+        <div class="element flex-1 m-auto cursor-pointer" v-scope="BottomMenuButton({ pageName: 'planning-page', dasharray: 1600, index: 1 })" @click="clicked" style="stroke: var(--color-100);">
             <svg v-bind:style="{ strokeDasharray: currentDasharray, strokeDashoffset: currentDashoffset, transition: transitionSpeed, stroke: store.home.menuSelected[index] }" class="relative h-12 aspect-square m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <rect x="48" y="80" width="416" height="384" rx="48" fill="none" stroke-linejoin="round" stroke-width="32"/>
                 <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M128 48v32M384 48v32M464 160H48M304 260l43.42-32H352v168M191.87 306.63c9.11 0 25.79-4.28 36.72-15.47a37.9 37.9 0 0011.13-27.26c0-26.12-22.59-39.9-47.89-39.9-21.4 0-33.52 11.61-37.85 18.93M149 374.16c4.88 8.27 19.71 25.84 43.88 25.84 28.59 0 52.12-15.94 52.12-43.82 0-12.62-3.66-24-11.58-32.07-12.36-12.64-31.25-17.48-41.55-17.48"/>

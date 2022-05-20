@@ -45,7 +45,7 @@ export default class Store {
             informations: {
                 currentInformation: "",
                 infos: [],
-                infosUnseen: 1,
+                infosUnseen: 0,
                 errorMessage: "",
                 displayLoader: true,
             },
