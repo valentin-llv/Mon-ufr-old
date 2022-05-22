@@ -564,6 +564,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-left: 0.75rem;
 }
 
+.mt-20 {
+  margin-top: 5rem;
+}
+
+.-mt-5 {
+  margin-top: -1.25rem;
+}
+
 .-ml-3 {
   margin-left: -0.75rem;
 }
@@ -652,12 +660,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 4rem;
 }
 
+.w-10\/12 {
+  width: 83.333333%;
+}
+
 .w-14 {
   width: 3.5rem;
 }
 
-.w-10\/12 {
-  width: 83.333333%;
+.w-3\/4 {
+  width: 75%;
 }
 
 .w-10 {

@@ -8,9 +8,7 @@ export default class CacheManager {
             CacheManager._instance = new CacheManager();
         return CacheManager._instance;
     }
-    ;
     constructor() { }
-    ;
     async checkCache(url, timeoutCheck) {
         if ('serviceWorker' in navigator) {
             return caches.open(this.cacheStorageName).then((cache) => {
@@ -33,7 +31,6 @@ export default class CacheManager {
         else
             return false;
     }
-    ;
     async cacheData(url, data) {
         let fakeResponse = this.createFakeResponse(url, data);
         return await new Promise((resolve) => {
@@ -46,7 +43,6 @@ export default class CacheManager {
             });
         });
     }
-    ;
     createFakeResponse(url, data) {
         let warpedData = {
             date: Date.now(),
@@ -57,5 +53,4 @@ export default class CacheManager {
         let responseStatus = { "status": 200, "statusText": url };
         return new Response(blob, responseStatus);
     }
-    ;
 }

@@ -16,11 +16,11 @@ export default class Store {
     public static getInstance(): any {
         if(!Store._instance) Store._instance = new Store();
         return Store._instance.store;
-    };
+    }
 
     constructor() {
         this.initialiseStore();
-    };
+    }
 
     initialiseStore() {
         this.store = reactive({
@@ -64,6 +64,17 @@ export default class Store {
                 errorMessage: "",
                 displayLoader: true,
             },
+
+            planning: {
+                tabsDisplay: [true, false, false],
+
+                events: [],
+                eventsDisplayed: [],
+
+                showAddPlanningButton: false,
+                errorMessage: "",
+                displayLoader: true,
+            },
         });
-    };
+    }
 }

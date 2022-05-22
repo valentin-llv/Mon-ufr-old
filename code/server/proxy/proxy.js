@@ -6,27 +6,30 @@ import https from "https";
 import fetch from 'node-fetch';
 
 http.createServer((request, response) => {
-    if(request.method == "GET") {
-        let urlParams = parseUrl(request.url);
-
-        if(urlParams.query) {
-            fetch(urlParams.query).then((data) => {
-                return data.text();
-            }).then((data) => {
-                response.writeHead(200, {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "GET",
-                });
-                response.end(JSON.stringify({ response: data }));
-            }).catch(() => {
-                response.writeHead(200, {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "GET",
-                });
-                response.end(JSON.stringify({ response: false }));
-            });
-        }
+    if(request.method != "GET") {
+        response.end(`${request.method} from origin ${request.headers.origin} is not allowed for the request.`);
     }
+
+    let urlParams = parseUrl(request.url);
+    if(!urlParams.query) {
+        response.end(`Request query is not defined !`);
+    }
+
+    fetch(urlParams.query).then((data) => {
+        return data.text();
+    }).then((data) => {
+        response.writeHead(200, {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+        });
+        response.end(JSON.stringify({ response: data }));
+    }).catch(() => {
+        response.writeHead(200, {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+        });
+        response.end(JSON.stringify({ response: false }));
+    });
 }).listen(8080);
 
 function parseUrl(url) {

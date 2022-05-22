@@ -11,9 +11,9 @@ export default class CacheManager {
     public static getInstance(): CacheManager {
         if(!CacheManager._instance) CacheManager._instance = new CacheManager();
         return CacheManager._instance;
-    };
+    }
 
-    constructor() {};
+    constructor() {}
 
     public async checkCache(url: string, timeoutCheck: boolean): Promise<any> {
         if('serviceWorker' in navigator) {
@@ -36,7 +36,7 @@ export default class CacheManager {
                 return false;
             });
         } else return false;
-    };
+    }
 
     public async cacheData(url: string, data: Object): Promise<boolean> {
         let fakeResponse = this.createFakeResponse(url, data);
@@ -50,7 +50,7 @@ export default class CacheManager {
                 resolve(false);
             });
         });
-    };
+    }
 
     private createFakeResponse(url: string, data: Object): Response {
         let warpedData = {
@@ -63,5 +63,5 @@ export default class CacheManager {
 
         let responseStatus = {"status": 200 , "statusText": url};
         return new Response(blob, responseStatus);
-    };
+    }
 }

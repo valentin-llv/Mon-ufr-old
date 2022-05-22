@@ -46,6 +46,7 @@ export default class InformationsBox {
             Server.getInstance().registerInternetConnectivityStatusUpdate(this.load);
             return false;
         }
+        
         // Get the requested ressources
         let result = await FetchManager.getInstance().fetch(this.ressourcesPath, "serverBaseUrl");
 

@@ -10,11 +10,9 @@ export default class Store {
             Store._instance = new Store();
         return Store._instance.store;
     }
-    ;
     constructor() {
         this.initialiseStore();
     }
-    ;
     initialiseStore() {
         this.store = reactive({
             home: {
@@ -49,7 +47,14 @@ export default class Store {
                 errorMessage: "",
                 displayLoader: true,
             },
+            planning: {
+                tabsDisplay: [true, false, false],
+                events: [],
+                eventsDisplayed: [],
+                showAddPlanningButton: false,
+                errorMessage: "",
+                displayLoader: true,
+            },
         });
     }
-    ;
 }

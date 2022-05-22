@@ -47,6 +47,7 @@ export default class FetchManager {
             await fetch(Server.getInstance()[server] + url).then((data) => {
                 return data.json();
             }).then((data) => {
+                console.log('fetch')
                 CacheManager.getInstance().cacheData(url, data);
                 resolve(data);
             }).catch(() => {
