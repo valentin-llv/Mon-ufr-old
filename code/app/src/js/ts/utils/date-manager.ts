@@ -105,4 +105,21 @@ export default class DateManager {
     static convertDateIntoNumber(event) {
         return event.eventStart.date.year * 10000 + event.eventStart.date.month * 100 + event.eventStart.date.date * 1
     }
+
+    static getFullDate() {
+        let date = new Date();
+        return date.getFullYear() * 10000 + date.getMonth() * 100 + date.getDate() * 1;
+    }
+
+    static getDayNumber() {
+        let currentDayNumber = new Date().getDay();
+
+        if(currentDayNumber == 0) {
+            currentDayNumber = 6;
+        } else {
+            currentDayNumber -= 1;
+        }
+
+        return currentDayNumber;
+    }
 }

@@ -6,7 +6,7 @@ export default class CacheManager {
     private static _instance: CacheManager = null;
 
     private cacheStorageName = "data-cache";
-    private timeoutTime = 1000 * 60 * 60; // 1 hour
+    private timeoutTime = 1000 * 60 * 60 + 1000 * 60 * 30; // 1 hour 30 minutes
 
     public static getInstance(): CacheManager {
         if(!CacheManager._instance) CacheManager._instance = new CacheManager();

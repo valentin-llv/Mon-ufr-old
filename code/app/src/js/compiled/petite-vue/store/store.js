@@ -1,6 +1,7 @@
 "use strict";
 import { reactive } from '../../../../libs/petite-vue/petite-vue.js';
 import DataManager from '../../data/data-manager/data-manager.js';
+import PlanningBox from '../../pages/planning/planning.js';
 import Utils from '../../utils/utils.js';
 export default class Store {
     static _instance = null;
@@ -48,12 +49,39 @@ export default class Store {
                 displayLoader: true,
             },
             planning: {
-                tabsDisplay: [true, false, false],
+                tabsDisplay: [true, false],
+                changeSelectedTab(index) {
+                    this.tabsDisplay = [false, false];
+                    this.tabsDisplay[index] = true;
+                },
+                week: {
+                    daysName: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+                    daysNumber: [],
+                    monthName: "",
+                    selectedDay: false,
+                    selectedWeek: 0,
+                    weekDisplay: [],
+                    selectPreviousWeek() {
+                        if (this.selectedWeek > 0)
+                            this.selectedWeek -= 1;
+                        PlanningBox.getInstance().calcWeekTabDays();
+                        PlanningBox.getInstance().calcWeekTabContent();
+                    },
+                    selectNextWeek() {
+                        this.selectedWeek += 1;
+                        PlanningBox.getInstance().calcWeekTabDays();
+                        PlanningBox.getInstance().calcWeekTabContent();
+                    },
+                    changeSelectedDay(index) {
+                        this.selectedDay = index - 1;
+                        PlanningBox.getInstance().calcWeekTabContent();
+                    },
+                },
                 events: [],
-                eventsDisplayed: [],
                 showAddPlanningButton: false,
                 errorMessage: "",
                 displayLoader: true,
+                classToday: "",
             },
         });
     }

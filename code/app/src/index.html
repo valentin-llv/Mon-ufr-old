@@ -48,6 +48,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <path d="M427.68 351.43C402 320 383.87 304 383.87 217.35 383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43 73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57zM320 384v16a64 64 0 01-128 0v-16" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
                     </svg>
+                    <div v-if="store.informations.infosUnseen > 0 && store.informations.infos.length > 0" class="h-4 w-4 bg-accent rounded-full absolute top-0 left-full -ml-6 animate-ping" v-cloak></div>
                     <div v-if="store.informations.infosUnseen > 0 && store.informations.infos.length > 0" class="h-4 w-4 bg-accent rounded-full absolute top-0 left-full -ml-6" v-cloak></div>
                 </div>
                 <!-- Header end -->
@@ -173,7 +174,7 @@
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <p class="text-3xl font-bold">
-                    Il vous reste <span class="color-accent">4 cours 📗</span> <br /> aujourd'hui&nbsp;!
+                    Il vous reste <span class="color-accent">{{ store.planning.classToday }}</span> 📗 <br /> aujourd'hui&nbsp;!
                 </p>
 
                 <svg class="absolute top-0 left-full -translate-x-full mt-6 -ml-6 h-14 aspect-square cursor-pointer" v-scope="GotoButton({ pageName: 'settings-page' })" @click="clicked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -184,9 +185,9 @@
 
                 <!-- View navigator start -->
                 <div class="flex flex-row pb-5 mt-6 overflow-x-auto">
-                    <p class="p-2 pl-5 pr-5 rounded-full border-2 border-100 text-2xl whitespace-nowrap"> Ma semaine </p>
-                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 border-100 text-2xl whitespace-nowrap"> Mon planning </p>
-                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 border-100 text-2xl whitespace-nowrap"> Rechercher </p>
+                    <p class="p-2 pl-5 pr-5 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay[0] == true, 'border-accent': store.planning.tabsDisplay[0] == true, 'border-100': store.planning.tabsDisplay[0] == false }" @click="store.planning.changeSelectedTab(0)"> Ma semaine </p>
+                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay[1] == true, 'border-accent': store.planning.tabsDisplay[1] == true, 'border-100': store.planning.tabsDisplay[1] == false }" @click="store.planning.changeSelectedTab(1)"> Mon planning </p>
+                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay[2] == true, 'border-accent': store.planning.tabsDisplay[2] == true, 'border-100': store.planning.tabsDisplay[2] == false }" @click="store.planning.changeSelectedTab(2)"> Rechercher </p>
                 </div>
                 <!-- View navigator end -->
 
@@ -200,128 +201,75 @@
                 <!-- Add planning button end -->
 
                 <!-- Week view start -->
-                <div class="" v-if="store.planning.tabsDisplay[0]">
+                <div class="relative" v-if="store.planning.tabsDisplay[0]">
                     <!-- Current week start -->
                     <div class="flex flex-row -ml-3 mt-6 items-center justify-center">
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Lun </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 25 </p>
-                        </div>
-    
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Mar </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 26 </p>
-                        </div>
-    
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Mer </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 27 </p>
-                        </div>
-    
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Jeu </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 28 </p>
-                        </div>
-    
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Ven </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 29 </p>
-                        </div>
-    
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Sam </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 30 </p>
-                        </div>
-    
-                        <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1">
-                            <p class="text-lg"> Dim </p>
-                            <p class="text-center text-2xl font-mediusm mt-1"> 1 </p>
-                        </div>
+                        <template v-for="index in 7">
+                            <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1 duration-300" v-bind:class="{ 'bg-accent': (store.planning.week.selectedDay == index - 1) }" @click="store.planning.week.changeSelectedDay(index)">
+                                <p class="text-lg"> {{ store.planning.week.daysName[index - 1] }} </p>
+                                <p class="text-center text-2xl font-mediusm mt-1"> {{ store.planning.week.daysNumber[index - 1] }} </p>
+                            </div>
+                        </template>
                     </div>
                     <!-- Current week end -->
 
                     <!-- Date navigator start -->
                     <div class="flex flex-row mt-4">
-                        <img class="w-14 h-14 m-auto" src="assets/icons/arrow-back.svg" />
-                        <p class="flex-1 m-auto text-center font-medium text-2xl"> Juin 2022 </p>
-                        <img class="w-14 h-14 m-auto" src="assets/icons/arrow-forward.svg" />
+                        <img class="w-14 h-14 m-auto" src="assets/icons/arrow-back.svg" @click="store.planning.week.selectPreviousWeek" />
+                        <p class="flex-1 m-auto text-center font-medium text-2xl"> {{ store.planning.week.monthName }} </p>
+                        <img class="w-14 h-14 m-auto" src="assets/icons/arrow-forward.svg" @click="store.planning.week.selectNextWeek" />
                     </div>
                     <!-- Date navigator end -->
 
-                    <div class="" v-if="store.planning.eventsDisplayed.length">
-                        <div class="mt-5 cursor-pointer flex flex-row">
-                            <div class="relative">
-                                <p class="text-3xl font-bold"> 10h15 </p>
-                                <p class="text-2xl font-medium"> 18h15 </p>
+                    <!-- Week no class message -->
+                    <p class="absolute w-full text-center font-medium text-2xl mt-32" v-if="store.planning.week.weekDisplay.length == 0 && store.planning.displayLoader == false" v-cloak> Aucun cour ce jour </p>
+
+                    <div v-if="store.planning.week.weekDisplay.length">
+                        <template v-for="event in store.planning.week.weekDisplay">
+                            <div class="mt-5 cursor-pointer flex flex-row">
+                                <div class="relative">
+                                    <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
+                                    <p class="text-2xl font-medium"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
+                                </div>
+        
+                                <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
+                                    <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
+        
+                                    <p class="text-3xl font-medium"> {{ event.summary }} </p>
+                                    <p class="text-normalxl"> {{ event.teacher }} </p>
+        
+                                    <p class="text-normalxl mt-3"> {{ event.duration.text }} </p>
+                                    <p class="text-normalxl"> {{ event.location }} </p>
+                                </div>
                             </div>
-    
-                            <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                                <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-    
-                                <p class="text-3xl font-medium"> EXAMENS UFR S2 </p>
-                                <p class="text-normalxl"> Brouard Thierry </p>
-    
-                                <p class="text-normalxl mt-3"> 10h00 </p>
-                                <p class="text-normalxl"> Gr F Amphi 22 </p>
-                            </div>
-                        </div>
-    
-                        <div class="mt-5 cursor-pointer flex flex-row">
-                            <div class="relative">
-                                <p class="text-3xl font-bold"> 10h15 </p>
-                                <p class="text-2xl font-medium"> 18h15 </p>
-                            </div>
-    
-                            <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                                <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-    
-                                <p class="text-3xl font-medium"> EXAMENS UFR S2 </p>
-                                <p class="text-normalxl"> Brouard Thierry </p>
-    
-                                <p class="text-normalxl mt-3"> 10h00 </p>
-                                <p class="text-normalxl"> Gr F Amphi 22 </p>
-                            </div>
-                        </div>
-    
-                        <div class="mt-5 cursor-pointer flex flex-row">
-                            <div class="relative">
-                                <p class="text-3xl font-bold"> 10h15 </p>
-                                <p class="text-2xl font-medium"> 18h15 </p>
-                            </div>
-    
-                            <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                                <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-    
-                                <p class="text-3xl font-medium"> EXAMENS UFR S2 </p>
-                                <p class="text-normalxl"> Brouard Thierry </p>
-    
-                                <p class="text-normalxl mt-3"> 10h00 </p>
-                                <p class="text-normalxl"> Gr F Amphi 22 </p>
-                            </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
                 <!-- Week view end -->
 
                 <!-- View all start -->
-                <div class="" v-if="store.planning.tabsDisplay[1]">
-                    <p class="text-3xl font-medium mt-10"> Mardi 10 </p>
+                <div class="relative -mt-5" v-if="store.planning.tabsDisplay[1]">
+                    <div v-for="events in store.planning.events">
+                        <p class="text-3xl font-medium mt-10"> {{ events[0].eventStart.string.eventFullDateName }} </p>
 
-                    <div class="mt-5 cursor-pointer flex flex-row">
-                        <div class="relative">
-                            <p class="text-3xl font-bold"> 10h15 </p>
-                            <p class="text-2xl font-medium"> 18h15 </p>
-                        </div>
-
-                        <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                            <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-
-                            <p class="text-3xl font-medium"> EXAMENS UFR S2 </p>
-                            <p class="text-normalxl"> Brouard Thierry </p>
-
-                            <p class="text-normalxl mt-3"> 10h00 </p>
-                            <p class="text-normalxl"> Gr F Amphi 22 </p>
-                        </div>
+                        <template v-for="event in events">
+                            <div class="mt-5 cursor-pointer flex flex-row">
+                                <div class="relative">
+                                    <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
+                                    <p class="text-2xl font-medium"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
+                                </div>
+        
+                                <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
+                                    <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
+        
+                                    <p class="text-3xl font-medium"> {{ event.summary }} </p>
+                                    <p class="text-normalxl"> {{ event.teacher }} </p>
+        
+                                    <p class="text-normalxl mt-3"> {{ event.duration.text }} </p>
+                                    <p class="text-normalxl"> {{ event.location }} </p>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
                 <!-- View all end -->
@@ -329,9 +277,9 @@
                 <!-- Planning loader start -->
                 <div class="relative flex flex-col" v-if="store.planning.displayLoader">
                     <template v-for="index in 3">
-                        <div class="box-loading mt-5 cursor-pointer flex flex-row">
+                        <div class="box-loading mt-5 cursor-pointer flex flex-row animate-pulse">
                             <div class="relative">
-                                <p class="text-3xl font-bold bg-800 rounded-lg"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; </p>
+                                <p class="text-3xl font-bold bg-800 rounded-lg"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
                                 <p class="text-2xl font-medium bg-800 rounded-lg mt-3 w-3/4"> &nbsp; </p>
                             </div>
     

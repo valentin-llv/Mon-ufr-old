@@ -9,7 +9,7 @@ export default class FetchManager {
     private static _instance: FetchManager = null;
 
     private requestTimeout = 1000 * 15; // 15 secondes
-    private retryDelay = 1000 * 2; // 2 secondes
+    private retryDelay = 1000 * 3; // 2 secondes
 
     public static getInstance(): FetchManager {
         if(!FetchManager._instance) FetchManager._instance = new FetchManager();
@@ -47,8 +47,7 @@ export default class FetchManager {
             await fetch(Server.getInstance()[server] + url).then((data) => {
                 return data.json();
             }).then((data) => {
-                console.log('fetch')
-                CacheManager.getInstance().cacheData(url, data);
+                CacheManager.getInstance().cacheData(Server.getInstance()[server] + url, data);
                 resolve(data);
             }).catch(() => {
                 resolve(false);

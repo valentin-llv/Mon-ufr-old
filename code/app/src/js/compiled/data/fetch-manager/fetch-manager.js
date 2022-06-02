@@ -4,7 +4,7 @@ import Server from '../server-manager/server.js';
 export default class FetchManager {
     static _instance = null;
     requestTimeout = 1000 * 15;
-    retryDelay = 1000 * 2;
+    retryDelay = 1000 * 3;
     static getInstance() {
         if (!FetchManager._instance)
             FetchManager._instance = new FetchManager();
@@ -41,8 +41,7 @@ export default class FetchManager {
             await fetch(Server.getInstance()[server] + url).then((data) => {
                 return data.json();
             }).then((data) => {
-                console.log('fetch');
-                CacheManager.getInstance().cacheData(url, data);
+                CacheManager.getInstance().cacheData(Server.getInstance()[server] + url, data);
                 resolve(data);
             }).catch(() => {
                 resolve(false);
