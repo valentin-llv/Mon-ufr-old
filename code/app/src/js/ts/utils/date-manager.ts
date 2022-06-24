@@ -5,6 +5,9 @@
 
 export default class DateManager {
     static parseDate(string) {
+        string = string.replaceAll('-', '');
+        string = string.replaceAll(':', '');
+
         let yearString = string.split('T')[0].slice(0, 4);
         let monthString = ((string.split('T')[0].slice(4, 6) * 1) - 1).toString();
         let dateString = string.split('T')[0].slice(6, 8);

@@ -8,8 +8,8 @@ import Server from '../server-manager/server.js';
 export default class FetchManager {
     private static _instance: FetchManager = null;
 
-    private requestTimeout = 1000 * 15; // 15 secondes
-    private retryDelay = 1000 * 3; // 2 secondes
+    private requestTimeout = 1000 * 20; // 20 secondes
+    private retryDelay = 1000 * 3; // 3 secondes
 
     public static getInstance(): FetchManager {
         if(!FetchManager._instance) FetchManager._instance = new FetchManager();
@@ -18,9 +18,11 @@ export default class FetchManager {
 
     constructor() {};
 
-    public async fetch(url: string, server: string) {
-        let result = await CacheManager.getInstance().checkCache(url, true);
-        if(result) return result;
+    public async fetch(url: string, server: string, options: any = null) {
+        if(!options || options.cache) {
+            let result = await CacheManager.getInstance().checkCache(Server.getInstance()[server] + url, true);
+            if(result) return result;
+        }
 
         return new Promise(async (resolve) => {
             let result = false;

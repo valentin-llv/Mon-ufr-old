@@ -15,7 +15,7 @@ export default class InformationsBox {
     private static _instance: InformationsBox = null;
 
     private dataLoaded = false;
-    private ressourcesPath = "/data/informations/informations.json";
+    private ressourcesPath = "data/informations/informations.json";
 
     private informations = Store.getInstance().informations;
 
@@ -61,7 +61,7 @@ export default class InformationsBox {
     }
 
     private async loadWithoutInternet(reason: string): Promise<any> {
-        let result = await CacheManager.getInstance().checkCache(this.ressourcesPath, false);
+        let result = await CacheManager.getInstance().checkCache(Server.getInstance()["serverBaseUrl"] + this.ressourcesPath, false);
         if(!result) {
             this.informations.errorMessage = reason + " " + this.errorMessages.messageEnd;
             this.informations.displayLoader = false;

@@ -7,6 +7,8 @@ export default class Server {
 
     private serverUrl: string;
     private proxyUrl: string;
+    private mailsUrl: string;
+
     private isServerConnected: boolean;
     private internetConnectivityStatus: boolean;
 
@@ -23,8 +25,9 @@ export default class Server {
     };
 
     private setServerUrl(): void {
-        this.serverUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://192.168.1.4:5500/code/app/src/") ? "http://127.0.0.1:5500/code/server/" : ""; // http://192.168.1.4:5500/code/server
-        this.proxyUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://192.168.1.4:5500/code/app/src/") ? "http://localhost:8080" : ""; // http://192.168.1.4:8080
+        this.serverUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://127.0.0.1:5500/code/app/src/") ? "http://127.0.0.1:5500/code/server/" : ""; // http://192.168.1.4:5500/code/server
+        this.proxyUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://127.0.0.1:5500/code/app/src/") ? "http://127.0.0.1:8080" : ""; // http://192.168.1.4:8080
+        this.mailsUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://127.0.0.1:5500/code/app/src/") ? "http://127.0.0.1:8090" : ""; // http://192.168.1.4:8090
     };
 
     private listenConnectivityStatusEvents(): void {

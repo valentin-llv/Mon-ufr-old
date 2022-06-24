@@ -7,7 +7,7 @@ import DataManager from '../../data/data-manager/data-manager.js';
 export default class InformationsBox {
     static _instance = null;
     dataLoaded = false;
-    ressourcesPath = "/data/informations/informations.json";
+    ressourcesPath = "data/informations/informations.json";
     informations = Store.getInstance().informations;
     errorMessages = {
         head1: "La connexion a internet n'est pas disponible",
@@ -38,7 +38,7 @@ export default class InformationsBox {
         this.succes(result);
     }
     async loadWithoutInternet(reason) {
-        let result = await CacheManager.getInstance().checkCache(this.ressourcesPath, false);
+        let result = await CacheManager.getInstance().checkCache(Server.getInstance()["serverBaseUrl"] + this.ressourcesPath, false);
         if (!result) {
             this.informations.errorMessage = reason + " " + this.errorMessages.messageEnd;
             this.informations.displayLoader = false;

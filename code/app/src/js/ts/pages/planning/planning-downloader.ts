@@ -25,6 +25,7 @@ export default class PlanningDownloader {
 
         noCache: "Vous n'êtes pas connecté à internet. Impossible de charger votre emploi du temps.",
         planningsEmpty: "Tous vos emplois du temps sont vide.",
+        planningParseError: "Cet url ne correspond pas à un emploi du temps.",
     }
 
     private returnStatement = {
@@ -41,7 +42,7 @@ export default class PlanningDownloader {
         this.urls = urls;
     }
 
-    async download() {
+    async download(type = "normal") {
         if(!Server.getInstance().isInternetConnected) this.returnStatement.popupMessage = this.errorMessages.noInternet;
 
         let planning = await this.downloadPlanning();
@@ -55,14 +56,25 @@ export default class PlanningDownloader {
             }
         }
 
-        let planningParsed = this.parsePlanning(planning);
+        let planningParsed = [];
+        try {
+            planningParsed = this.parsePlanning(planning);
+        } catch(e) {
+            this.returnStatement.errorMessage = this.errorMessages.planningParseError;
+            return this.returnStatement;
+        }
+
+        if(!planningParsed.length && type == "addPlanning") {
+            this.returnStatement.errorMessage = this.errorMessages.planningParseError;
+            return this.returnStatement;
+        }
+
         if(!planningParsed.length) {
             this.returnStatement.errorMessage = this.errorMessages.planningsEmpty;
             return this.returnStatement;
         }
 
         this.returnStatement.planning = planningParsed;
-
         return this.returnStatement;
     }
 
@@ -86,7 +98,7 @@ export default class PlanningDownloader {
         let plannings = [];
         for(let i = 0; i < this.urls; i++) {
             // Get the requested ressources
-            let result = await CacheManager.getInstance().checkCache("?query=" + this.urls[i], false);
+            let result = await CacheManager.getInstance().checkCache(Server.getInstance()["proxyBaseUrl"] + "?query=" + this.urls[i], false);
 
             // Check if result is valid
             if(!result) return [];

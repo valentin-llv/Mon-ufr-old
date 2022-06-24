@@ -45,10 +45,22 @@ export default class DataManager {
             },
             planning: {
                 urls: [],
+                eventNotes: {},
+                elementsToHide: [],
+                eventColors: {},
             },
             settings: {
                 themeColor: "dark",
                 accentColor: "#49b583",
+                lowPerfMode: false,
+                planning: {
+                    planningTemplate: 1,
+                },
+            },
+            mail: {
+                hierarchy: {
+                    "Réception": [],
+                },
             },
         };
     }

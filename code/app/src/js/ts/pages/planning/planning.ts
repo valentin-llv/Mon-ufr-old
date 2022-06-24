@@ -6,6 +6,7 @@ import Store from '../../petite-vue/store/store.js';
 import DataManager from '../../data/data-manager/data-manager.js';
 import DateManager from '../../utils/date-manager.js';
 import PlanningDownloader from './planning-downloader.js';
+import PageNavigator from '../../navigation/pageNavigator/pageNavigator.js';
 
 /* Informations box */
 
@@ -25,36 +26,60 @@ export default class PlanningBox {
     }
 
     async loadPlannings() {
-        // ------> remove later
-        DataManager.getInstance().data.planning.urls = ["http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=9101640d448493d466545be62dca3ab4f16bc99c1231ad75105654c3c757c8eb7620eb46444396bdf9e9eb1f96f57e6756c0259e9250fe3702f165b84e00ba5c,1"];
-
         // Check if the use has planning urls registered
-        if(DataManager.getInstance().data.planning.urls.length == 0) this.userHasNoPlanning();
+        if(DataManager.getInstance().data.planning.urls.length == 0) {
+            this.userHasNoPlanning();
+            return false;
+        }
 
         let result = await new PlanningDownloader(DataManager.getInstance().data.planning.urls).download();
+        if(result.popupMessage) {
+            this.planning.popMessage.title = result.popupMessage.title;
+            this.planning.popMessage.content = result.popupMessage.content;
+        }
+
         if(result.errorMessage) {
             this.planning.errorMessage = result.errorMessage;
             this.planning.displayLoader = false;
             return false;
         }
 
-        if(result.popupMessage) {
-            // ------> todo
-        }
-
-        this.planning.events = result.planning;
+        this.planning.events = this.filterEvents(result.planning);
         this.planning.displayLoader = false;
         this.planning.errorMessage = "";
 
         this.calcClassToday();
-
         this.calcWeekTabContent();
+        
+        this.calcTimeBeforeNextClass();
+        setInterval(this.calcTimeBeforeNextClass, 60000);
     }
 
     userHasNoPlanning() {
         this.planning.errorMessage = "Vous n'avez pas encore ajouté d'emploi du temps, ajoutez en un pour le voir apparaitre ici.";
         this.planning.showAddPlanningButton = true;
         this.planning.displayLoader = false;
+    }
+
+    filterEvents(planning) {
+        let filteredPlanning = planning;
+        for(let j = 0; j < filteredPlanning.length; j++) {
+            for(let i = 0; i < filteredPlanning[j].length; i++) {
+                if(DataManager.getInstance().data.planning.elementsToHide.includes(filteredPlanning[j][i].uid) == true || DataManager.getInstance().data.planning.elementsToHide.includes(filteredPlanning[j][i].categoryId) == true) {
+                    filteredPlanning[j].splice(i, 1);
+                    i -= 1;
+
+                    if(filteredPlanning[j].length == 0) {
+                        filteredPlanning.splice(j, 1);
+                        j -= 1;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        return filteredPlanning;
     }
 
     calcWeekTabDays() {
@@ -107,6 +132,52 @@ export default class PlanningBox {
         }
     }
 
+    calcTimeBeforeNextClass = () => {
+        let date = new Date();
+        let todayFullDate = date.getFullYear() * 10000 + date.getMonth() * 100 + date.getDate() * 1;
+
+        let dayFound = false;
+        for(let i = 0; i < this.planning.events.length; i++) {
+            let fullDate2 = DateManager.convertDateIntoNumber(this.planning.events[i][0]);
+
+            if(todayFullDate == fullDate2) {
+                let fullHour = date.getHours() * 100 + date.getMinutes() * 1;
+
+                for(let j = 0; j < this.planning.events[i].length; j++) {
+                    let fullHour2 = this.planning.events[i][j].eventStart.time.hour * 100 + this.planning.events[i][j].eventStart.time.minute * 1;
+
+                    this.planning.nextClass = this.planning.events[i][j];
+                    if(fullHour <= fullHour2) {
+                        let date2 = {
+                            time: {
+                                minute: this.planning.events[i][j].eventStart.time.minute,
+                                hour: this.planning.events[i][j].eventStart.time.hour,
+                            },
+                        };
+    
+                        let date1 = {
+                            time: {
+                                minute: date.getMinutes(),
+                                hour: 7,
+                            },
+                        }
+                        
+                        let time = DateManager.calcDuration(date1, date2);
+                        this.planning.nextClassTime = time.text;
+    
+                        dayFound = true;
+    
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(dayFound == false) {
+            this.planning.nextClassTime = "";
+        }
+    }
+
     calcWeekTabContent() {
         let currentDayNumber = DateManager.getDayNumber();
         let date = new Date();
@@ -123,4 +194,75 @@ export default class PlanningBox {
 
         this.planning.week.weekDisplay = classDay;
     }
+
+    fillSearchTab(search) {
+        let searchResult = JSON.parse(JSON.stringify(this.planning.events));
+
+        for(let j = 0; j < searchResult.length; j++) {
+            for(let i = 0; i < searchResult[j].length; i++) {
+                if(searchResult[j][i].summary.toLowerCase().includes(search) != true) {
+                    searchResult[j].splice(i, 1);
+                    i -= 1;
+
+                    if(searchResult[j].length == 0) {
+                        searchResult.splice(j, 1);
+                        j -= 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        this.planning.search.events = searchResult;
+    }
+
+    async addPlanning(url) {
+        let addPlanning = Store.getInstance().addPlanning;
+        addPlanning.displayLoader = true;
+
+        if(!this.checkUrlValidity(url)) {
+            addPlanning.errorMessage = "L'url n'est pas valide";
+            addPlanning.displayLoader = false;
+            return false;
+        }
+
+        if(DataManager.getInstance().data.planning.urls.includes(url)) {
+            addPlanning.errorMessage = "Ce planning a déjà été ajouté";
+            addPlanning.displayLoader = false;
+            return false;
+        }
+
+        let result = await new PlanningDownloader([url]).download("addPlanning");
+
+        if(result.errorMessage) {
+            addPlanning.errorMessage = result.errorMessage;
+            addPlanning.displayLoader = false;
+            return false;
+        }
+
+        addPlanning.errorMessage = "";
+        addPlanning.displayLoader = false;
+        this.planning.showAddPlanningButton = false;
+        addPlanning.url = "";
+
+        DataManager.getInstance().data.planning.urls.push(url);
+        PageNavigator.getInstance().back();
+
+        this.loadPlannings();
+    }
+
+    checkUrlValidity(url) {
+        if(url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) return true;
+        else return false;
+    }
+
+    hasEventNote(event) {
+        return DataManager.getInstance().data.planning.eventNotes[event.uid] != undefined ? true : false;
+    }
+
+    getNote(event) {
+        return DataManager.getInstance().data.planning.eventNotes[event.uid];
+    }
 }
+
+// http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=9101640d448493d466545be62dca3ab4f16bc99c1231ad75105654c3c757c8eb7620eb46444396bdf9e9eb1f96f57e6756c0259e9250fe3702f165b84e00ba5c,1

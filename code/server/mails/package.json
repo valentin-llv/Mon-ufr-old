@@ -1,0 +1,8 @@
+{
+    "main": "mails.js",
+    "type": "module",
+    "dependencies": {
+        "imap-simple": "^5.1.0",
+        "node-fetch": "^3.2.6"
+    }
+}

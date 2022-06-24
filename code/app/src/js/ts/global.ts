@@ -18,72 +18,10 @@ import openShareMenu from './petite-vue/dom-functions/open-share-menu.js';
 /* Importing Petite Vue */
 
 import { createApp } from '../../libs/petite-vue/petite-vue.js';
-
-/* Planning box */
-
-// class PlanningBox {
-//     private static _instance: PlanningBox = null;
-
-//     private dataLoaded = false;
-
-//     public static getInstance(): PlanningBox {
-//         if(!PlanningBox._instance) PlanningBox._instance = new PlanningBox();
-//         return PlanningBox._instance;
-//     };
-
-//     constructor() {
-//         this.load();
-//     }
-
-//     load() {
-//         // // Data is alreay loaded, no need to load data again
-//         // if(this.dataLoaded) return false;
-
-//         // // Check if internet connexion is available
-//         // if(!Server.getInstance().isInternetConnected) {
-//         //     this.loadWithoutInternet(this.errorMessages.head1);
-
-//         //     Server.getInstance().registerInternetConnectivityStatusUpdate(this.load);
-//         //     return false;
-//         // }
-//         // // Get the requested ressources
-//         // let result = await FetchManager.getInstance().fetch(this.ressourcesPath, "serverBaseUrl");
-
-//         // // Check if result is valid
-//         // if(!result) {
-//         //     this.loadWithoutInternet(this.errorMessages.head2);
-//         //     return false;
-//         // }
-
-//         // // Fill the page with the result data
-//         // this.succes(result);
-
-//         // Data is alreay loaded, no need to load data again
-//         if(this.dataLoaded) return false;
-
-//         // Check if internet connexion is available
-//         if(!Server.getInstance().isInternetConnected) {
-//             this.loadWithoutInternet(this.errorMessages.head1);
-
-//             Server.getInstance().registerInternetConnectivityStatusUpdate(this.load);
-//             return false;
-//         }
-//         // Get the requested ressources
-//         let result = await FetchManager.getInstance().fetch(this.ressourcesPath, "serverBaseUrl");
-//     };
-
-//     private async loadWithoutInternet(reason: string): Promise<any> {
-//         let result = await CacheManager.getInstance().checkCache(this.ressourcesPath, false);
-//         if(!result) {
-//             this.informations.errorMessage = reason + " " + this.errorMessages.messageEnd;
-//             this.informations.displayLoader = false;
-
-//             return false;
-//         }
-        
-//         this.succes(result);
-//     };
-// }
+import ClassEvent from './pages/planning/event.js';
+import MailBox from './pages/mails/mails.js';
+import MailMessage from './pages/mails/message.js';
+import Popup from './utils/popup.js';
 
 /* Petite vue intialisation */
 
@@ -98,6 +36,11 @@ function initPetiteVue(): void {
         BottomMenuButton,
         GotoButton,
         BackButton,
+
+        ClassEvent,
+        MailMessage,
+
+        Popup,
     }).mount();
 }
 
@@ -106,6 +49,7 @@ function initPetiteVue(): void {
 function main(): void {
     InformationsBox.getInstance();
     PlanningBox.getInstance();
+    MailBox.getInstance();
 
     initPetiteVue();
 }

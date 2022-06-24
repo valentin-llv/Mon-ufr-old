@@ -35,8 +35,8 @@
                 <!-- Header start -->
                 <p class="text-3xl font-medium"> Bonjour 👋 </p>
                 <p class="mt-2 text-3xl font-bold">
-                    On est le <span class="color-accent" v-scope v-once v-cloak> {{ store.home.date }} </span> 📆, <br />
-                    il est 10h30 ⌚, <br />
+                    On est le <span class="color-accent" v-once v-cloak> {{ store.home.date }} </span> 📆, <br />
+                    il est <span class="color-accent" v-once v-cloak> {{ store.home.hour }} </span> ⌚, <br />
                     heureux de vous revoir !
                 </p>
 
@@ -54,24 +54,24 @@
                 <!-- Header end -->
 
                 <!-- Next class section start -->
-                <p class="text-3xl font-medium mt-10"> Prochain cour </p>
+                <p class="text-3xl font-medium mt-10" v-if="store.planning.nextClassTime != '' || store.planning.displayLoader"> Prochain cour <span v-if="store.planning.nextClassTime != ''" v-cloak> dans <span class="color-accent"> {{ store.planning.nextClassTime }} </span> </span> </p>
 
-                <div class="relative pb-5 box-border">
-                    <div class="mt-5 cursor-pointer flex flex-row">
-                        <div class="relative">
-                            <p class="text-3xl font-bold"> 10h15 </p>
-                            <p class="text-2xl font-medium"> 18h15 </p>
-                        </div>
+                <div class="relative pb-5 box-border" v-if="store.planning.nextClassTime != ''" v-cloak>
+                    <div v-scope="ClassEvent({event: store.planning.nextClass})"></div>
+                </div>
 
-                        <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                            <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
+                <div class="box-loading mt-5 cursor-pointer flex flex-row animate-pulse relative" v-if="store.planning.displayLoader">
+                    <div class="relative">
+                        <p class="text-3xl font-bold bg-800 rounded-lg"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
+                        <p class="text-2xl font-medium bg-800 rounded-lg mt-3 w-3/4"> &nbsp; </p>
+                    </div>
 
-                            <p class="text-3xl font-medium"> EXAMENS UFR S2 </p>
-                            <p class="text-normalxl"> Brouard Thierry </p>
+                    <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
+                        <p class="text-3xl font-medium opacity-0"> hidden </p>
+                        <p class="text-normalxl opacity-0"> hidden </p>
 
-                            <p class="text-normalxl mt-3"> 10h00 </p>
-                            <p class="text-normalxl"> Gr F Amphi 22 </p>
-                        </div>
+                        <p class="text-normalxl mt-3 opacity-0"> hidden </p>
+                        <p class="text-normalxl opacity-0"> hidden </p>
                     </div>
                 </div>
                 <!-- Next class section end -->
@@ -80,7 +80,7 @@
                 <p class="text-3xl font-medium mt-6"> Vous avez <span class="color-accent"> 1 rappel </span> </p>
 
                 <div class="relative pb-5 box-border">
-                    <div class="relative mt-5 p-5 rounded-lg bg-accent event-box-shadow flex flex-row cursor-pointer">
+                    <div class="relative mt-5 p-5 rounded-lg bg-accent element-box-shadow flex flex-row cursor-pointer">
                         <svg class="w-12 h-12m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path d="M416.07 272a160 160 0 10-160 160 160 160 0 00160-160zM142.12 91.21A46.67 46.67 0 00112 80l-2.79.08C83.66 81.62 64 104 64.07 131c0 13.21 4.66 19.37 10.88 27.23a4.55 4.55 0 003.24 1.77h.88a3.23 3.23 0 002.54-1.31L142.38 99a5.38 5.38 0 001.55-4 5.26 5.26 0 00-1.81-3.79zM369.88 91.21A46.67 46.67 0 01400 80l2.79.08C428.34 81.62 448 104 447.93 131c0 13.21-4.66 19.37-10.88 27.23a4.55 4.55 0 01-3.24 1.76h-.88a3.23 3.23 0 01-2.54-1.31L369.62 99a5.38 5.38 0 01-1.55-4 5.26 5.26 0 011.81-3.79z" fill="none" stroke="var(--color-100)" stroke-miterlimit="10" stroke-width="32"/>
                             <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256.07 160v112h-80M416.07 432l-40-40M96.07 432l40-40"/>
@@ -95,7 +95,7 @@
 
                 <div class="relative pb-5 box-border" v-if="store.informations.infosUnseen > 0" v-cloak>
                     <template v-for="(info, index) in store.informations.infos">
-                        <div class="relative mt-5 p-5 rounded-lg bg-accent event-box-shadow flex flex-row cursor-pointer" v-show="info.isUnseen" @click="infosBoxClicked(index)">
+                        <div class="relative mt-5 p-5 rounded-lg bg-accent element-box-shadow flex flex-row cursor-pointer" v-show="info.isUnseen" @click="infosBoxClicked(index)">
                             <svg class="w-12 h-12 m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M368 415.86V72a24.07 24.07 0 00-24-24H72a24.07 24.07 0 00-24 24v352a40.12 40.12 0 0040 40h328" fill="none" stroke="var(--color-100)" stroke-linejoin="round" stroke-width="32"/>
                                 <path d="M416 464h0a48 48 0 01-48-48V128h72a24 24 0 0124 24v264a48 48 0 01-48 48z" fill="none" stroke="var(--color-100)" stroke-linejoin="round" stroke-width="32"/>
                                 <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M240 128h64M240 192h64M112 256h192M112 320h192M112 384h192"/>
@@ -127,41 +127,15 @@
                 <!-- Information section end  -->
 
                 <!-- Mails section start -->
-                <p class="text-3xl font-medium mt-6"> Nouveau mails </p>
+                <p v-if="store.mail.isUnseen" class="text-3xl font-medium mt-6"> Nouveau mails </p>
 
                 <div class="relative pb-5 box-border">
-                    <div class="relative mt-5 p-5 pl-7 rounded-lg bg-800 flex flex-row cursor-pointer">
-                        <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-
-                        <div class="relative rounded-full w-16 h-16 text-4xl font-medium bg-700">
-                            <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"> R </p>
-                        </div>
-
-                        <div class="flex-1 flex flex-col ml-4 text-ellipsis overflow-hidden whitespace-nowrap">
-                            <div class="flex-1 flex flex-row">
-                                <p class="flex-1 font-medium text-2xl text-ellipsis overflow-hidden whitespace-nowrap"> Romain Gicquaud </p>
-                                <p class="ml-2 text-normalxl text-ellipsis overflow-hidden whitespace-nowrap"> 6 Mai 2022 </p>
+                    <div v-if="!store.mail.displayLoader">
+                        <template v-for="(mailId, index) in store.mail.hierarchy['Réception']" :key="mailId.id">
+                            <div v-show="!mailId.flags.includes('\\Seen')" v-effect="if(!mailId.flags.includes('\\Seen')) { store.mail.unseenCounter += 1; store.mail.isUnseen = true; }">
+                                <div v-scope="MailMessage({messageId: mailId, box: store.mail.tabName })"></div>
                             </div>
-
-                            <p class="flex-1 text-normalxl mt-1 text-ellipsis overflow-hidden whitespace-nowrap"> CC2 d'algèbre L1 </p> 
-                        </div>
-                    </div>
-
-                    <div class="relative mt-5 p-5 pl-7 rounded-lg bg-800 flex flex-row cursor-pointer">
-                        <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-
-                        <div class="relative rounded-full w-16 h-16 text-4xl font-medium bg-700">
-                            <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"> R </p>
-                        </div>
-
-                        <div class="flex-1 flex flex-col ml-4 text-ellipsis overflow-hidden whitespace-nowrap">
-                            <div class="flex-1 flex flex-row">
-                                <p class="flex-1 font-medium text-2xl text-ellipsis overflow-hidden whitespace-nowrap"> Romain Gicquaud </p>
-                                <p class="ml-2 text-normalxl text-ellipsis overflow-hidden whitespace-nowrap"> 6 Mai 2022 </p>
-                            </div>
-
-                            <p class="flex-1 text-normalxl mt-1 text-ellipsis overflow-hidden whitespace-nowrap"> CC2 d'algèbre L1 </p> 
-                        </div>
+                        </template>
                     </div>
                 </div>
                 <!-- Mails section end -->
@@ -170,41 +144,42 @@
         <!-- end of home page -->
 
         <!-- start of planning page -->
-        <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: false, pageName: 'planning-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'planning-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <p class="text-3xl font-bold">
                     Il vous reste <span class="color-accent">{{ store.planning.classToday }}</span> 📗 <br /> aujourd'hui&nbsp;!
                 </p>
 
-                <svg class="absolute top-0 left-full -translate-x-full mt-6 -ml-6 h-14 aspect-square cursor-pointer" v-scope="GotoButton({ pageName: 'settings-page' })" @click="clicked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <svg class="absolute top-0 left-full -translate-x-full mt-6 -ml-6 h-14 aspect-square cursor-pointer" v-scope="GotoButton({ pageName: 'add-planning-page' })" @click="clicked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z" fill="none" stroke="var(--color-100)" stroke-miterlimit="10" stroke-width="32"/>
                     <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 176v160M336 256H176"/>
                 </svg>
                 <!-- Page header end -->
 
+                <!-- Popup message start -->
+                <div class="p-4 rounded-lg bg-accent mt-5" v-if="store.planning.popMessage.title != ''" v-cloak>
+                    <p class="text-3xl font-medium"> {{ store.planning.popMessage.title }} </p>
+                    <p class="text-normalxl mt-2"> {{ store.planning.popMessage.content }} </p>
+                </div>
+                <!-- Popup message end -->
+
                 <!-- View navigator start -->
                 <div class="flex flex-row pb-5 mt-6 overflow-x-auto">
-                    <p class="p-2 pl-5 pr-5 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay[0] == true, 'border-accent': store.planning.tabsDisplay[0] == true, 'border-100': store.planning.tabsDisplay[0] == false }" @click="store.planning.changeSelectedTab(0)"> Ma semaine </p>
-                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay[1] == true, 'border-accent': store.planning.tabsDisplay[1] == true, 'border-100': store.planning.tabsDisplay[1] == false }" @click="store.planning.changeSelectedTab(1)"> Mon planning </p>
-                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay[2] == true, 'border-accent': store.planning.tabsDisplay[2] == true, 'border-100': store.planning.tabsDisplay[2] == false }" @click="store.planning.changeSelectedTab(2)"> Rechercher </p>
+                    <p class="p-2 pl-5 pr-5 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay == 0, 'border-accent': store.planning.tabsDisplay == 0, 'border-100': store.planning.tabsDisplay != 0 }" @click="store.planning.changeSelectedTab(0)"> Ma semaine </p>
+                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay == 1, 'border-accent': store.planning.tabsDisplay == 1, 'border-100': store.planning.tabsDisplay != 1 }" @click="store.planning.changeSelectedTab(1)"> Mon planning </p>
+                    <p class="p-2 pl-5 pr-5 ml-3 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'bg-accent': store.planning.tabsDisplay == 2, 'border-accent': store.planning.tabsDisplay == 2, 'border-100': store.planning.tabsDisplay != 2 }" @click="store.planning.changeSelectedTab(2)"> Rechercher </p>
                 </div>
                 <!-- View navigator end -->
 
                 <!-- Planning error message -->
-                <p class="w-10/12 text-center font-medium text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-20"> {{ store.planning.errorMessage }} </p>
-                
-                <!-- Add planning button start -->
-                <div class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-full p-5 rounded-lg bg-accent -mt-5 cursor-pointer" v-if="store.planning.showAddPlanningButton">
-                    <p class="text-2xl whitespace-nowrap"> Ajouter un emploi du temps </p>
-                </div>
-                <!-- Add planning button end -->
+                <p class="w-10/12 text-center font-medium text-2xl absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-2/3 mt-20"> {{ store.planning.errorMessage }} </p>
 
                 <!-- Week view start -->
-                <div class="relative" v-if="store.planning.tabsDisplay[0]">
+                <div class="relative h-full" v-if="store.planning.tabsDisplay == 0">
                     <!-- Current week start -->
                     <div class="flex flex-row -ml-3 mt-6 items-center justify-center">
-                        <template v-for="index in 7">
+                        <template class="w-" v-for="index in 7">
                             <div class="border-2 border-accent rounded-lg p-2 pl-3 pr-3 box-border ml-2.5 flex-1 duration-300" v-bind:class="{ 'bg-accent': (store.planning.week.selectedDay == index - 1) }" @click="store.planning.week.changeSelectedDay(index)">
                                 <p class="text-lg"> {{ store.planning.week.daysName[index - 1] }} </p>
                                 <p class="text-center text-2xl font-mediusm mt-1"> {{ store.planning.week.daysNumber[index - 1] }} </p>
@@ -222,57 +197,161 @@
                     <!-- Date navigator end -->
 
                     <!-- Week no class message -->
-                    <p class="absolute w-full text-center font-medium text-2xl mt-32" v-if="store.planning.week.weekDisplay.length == 0 && store.planning.displayLoader == false" v-cloak> Aucun cour ce jour </p>
+                    <div class="absolute w-full top-1/2 -translate-y-1/2 -mt-5" v-if="store.planning.week.weekDisplay.length == 0 && !store.planning.displayLoader && store.planning.errorMessage == ''" v-cloak>
+                        <svg class="relative w-64 h-64 m-auto" xmlns="http://www.w3.org/2000/svg" width="741.84606" height="522.41797" viewBox="0 0 741.84606 522.41797" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <path d="M520.793,516.6474a10.74264,10.74264,0,0,0-10.95628-12.30071l-68.80437-69.56692-13.59213,19.00109,71.90643,62.40721a10.80091,10.80091,0,0,0,21.44635.45933Z" transform="translate(-229.07697 -188.79102)" fill="#ffb8b8"/>
+                            <path d="M488.20078,476.47743l-17.5613,17.542a4.51352,4.51352,0,0,1-6.335.02552L416.317,446.86677a17.603,17.603,0,1,1,24.93713-24.849l46.98661,48.13244A4.51547,4.51547,0,0,1,488.20078,476.47743Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <circle cx="197.53395" cy="177.02015" r="24.56103" fill="#ffb8b8"/>
+                            <polygon points="114.543 471.345 120.762 481.91 164.474 462.951 155.295 447.357 114.543 471.345" fill="#ffb8b8"/>
+                            <path d="M345.48345,655.41085l12.24733,20.80687.00049.00085a15.386,15.386,0,0,1-5.45551,21.06459l-.4309.25361-20.05237-34.067Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <polygon points="186.6 509.407 198.86 509.407 204.692 462.119 186.598 462.12 186.6 509.407" fill="#ffb8b8"/>
+                            <path d="M412.55,694.1958l24.1438-.001h.001a15.38605,15.38605,0,0,1,15.38647,15.38623v.5l-39.53052.00146Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M366.38843,669.54838a4.49319,4.49319,0,0,1-3.624-1.833l-11.82373-16.0586a4.4996,4.4996,0,0,1,1.12452-6.41015l52.614-35.1416-31.74658-83.47461,67.88916,5.60254,2.28662,71.7334a36.04577,36.04577,0,0,1-18.04517,32.42382l-56.42651,32.55371A4.48594,4.48594,0,0,1,366.38843,669.54838Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M416.04712,688.59818a4.49988,4.49988,0,0,1-4.48877-4.33984l-2.488-69.88184,30.80835-1.623-2.45312,70.38379a4.48729,4.48729,0,0,1-4.19971,4.333l-16.8728,1.11817C416.25073,688.59525,416.14868,688.59818,416.04712,688.59818Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M448.67871,546.1099c-7.83838,0-35.21655-8.81641-44.72119-11.959-1.42188,1.13769-9.23315,6.97851-18.35107,5.91113-5.626-.66016-10.57886-3.84473-14.721-9.46582-9.147-12.41406,2.15063-65.65137,13.239-108.126a34.26782,34.26782,0,0,1,40.52857-24.87988h0a34.57136,34.57136,0,0,1,26.08764,25.37793c2.08765,8.498.29175,18.49414-1.01953,25.79394-.61645,3.43164-1.10351,6.14258-.937,7.47461.64355,5.14844,4.21875,85.8916,1.91992,89.33985C450.45923,545.94388,449.75122,546.1099,448.67871,546.1099Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M420.00379,546.25292a10.74266,10.74266,0,0,0,.9416-16.44569l.48533-97.84356-23.04478,3.8374,6.76925,94.97037a10.80091,10.80091,0,0,0,14.8486,15.48148Z" transform="translate(-229.07697 -188.79102)" fill="#ffb8b8"/>
+                            <path d="M425.33374,494.79935H400.512a4.51352,4.51352,0,0,1-4.5-4.459l-.60937-67.292a17.603,17.603,0,1,1,35.2041.043l-.77319,67.25976A4.51547,4.51547,0,0,1,425.33374,494.79935Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M420.35705,390.26988c-11.24529.02059-21.85416-8.868-23.80286-19.94323a28.67148,28.67148,0,0,1,.91927-13.01372,34.95394,34.95394,0,0,1,47.93529-21.95277c3.00832,1.36131,5.97146,3.31644,7.3489,6.31741s.51536,7.19528-2.49791,8.5456c-1.96915.88243-4.44022.4491-6.18718,1.71574-2.50929,1.81936-1.86334,5.69129-.74286,8.58112s2.38775,6.38691.50946,8.85239c-1.75023,2.29738-5.24872,2.22609-8.00435,1.36136s-5.47558-2.31276-8.34865-2.01821c-4.19039.4296-7.20172,4.59773-7.7591,8.77305s.75474,8.34892,2.05018,12.35714Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M727.69556,415.33663c0-67.16541,54.44832-226.54561,121.61373-226.54561S970.923,348.17122,970.923,415.33663a121.61373,121.61373,0,1,1-243.22747,0Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M849.30925,711.209a1,1,0,0,1-1-1V290.9248a1,1,0,0,1,2,0V710.209A1,1,0,0,1,849.30925,711.209Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M849.30925,371.87061a.99683.99683,0,0,1-.70715-.293l-48.13452-48.13428a1,1,0,0,1,1.41431-1.41406l48.13452,48.13427a1,1,0,0,1-.70716,1.707Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M849.30925,455.20068a1,1,0,0,1-.70715-1.707l80.61-80.61035a1,1,0,0,1,1.4143,1.41406l-80.61,80.61035A.997.997,0,0,1,849.30925,455.20068Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M512.75454,516.07833c15.95481-3.60678,34.03035,8.87341,34.59062,25.62768.15759,4.71249-1.22354,9.66138-4.84973,12.86729-2.99372,2.64675-7.44863,3.9815-11.3187,2.68784-7.44737-2.48945-7.845-12.86687-3.85-18.40942,5.40939-7.50479,16.12575-8.78623,24.62919-7.89363,10.3961,1.09127,20.27689,5.64956,28.56833,11.89757,16.5987,12.50793,27.168,31.67789,35.72289,50.19942a253.09711,253.09711,0,0,1,18.95912,59.57906q.72364,3.8748,1.32589,7.77061a1.51056,1.51056,0,0,0,1.8598,1.02108,1.53833,1.53833,0,0,0,1.02107-1.8598,256.43885,256.43885,0,0,0-19.2345-65.06188c-8.95744-20.07249-20.2501-40.89324-38.21465-54.28884-8.95541-6.67776-19.53073-11.32453-30.72247-12.31825-9.42172-.83656-20.57851,1.15666-26.43759,9.351-4.62229,6.46462-4.15275,17.20837,2.9993,21.71061,3.932,2.47519,8.9283,2.186,13.011.26156a16.66327,16.66327,0,0,0,8.786-10.89127c2.5395-9.30518-1.31669-19.36986-7.92811-26.021a33.31988,33.31988,0,0,0-23.45167-9.86212,29.53,29.53,0,0,0-6.30452.75164c-1.88353.42579-1.04178,3.306.83872,2.88088Z" transform="translate(-229.07697 -188.79102)" fill="#ccc"/>
+                            <path d="M589.698,700.34085l-9.91475-16.92813,12.22567-7.16079,9.91474,16.92759v.00053a7.0842,7.0842,0,0,1-12.22566,7.1608Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <circle cx="327.83846" cy="467.64477" r="8.71897" fill="var(--color-accent)"/>
+                            <path d="M628.05951,700.34085l-9.91474-16.92813,12.22539-7.16079,9.91475,16.92759a7.08423,7.08423,0,0,1-12.2254,7.16133Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M558.572,674.00087a18.5487,18.5487,0,0,1,18.52781-18.52781h58.65109a7.84026,7.84026,0,0,1,7.83106,7.83132v6.67387a22.57592,22.57592,0,0,1-22.55044,22.55044H577.09978A18.5487,18.5487,0,0,1,558.572,674.00087Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M572.09744,702.52378V682.9061h14.16833v19.61768a7.08416,7.08416,0,1,1-14.16833,0Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M613.21,702.52378V682.9061h14.16833v19.61768a7.08417,7.08417,0,1,1-14.16833,0Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M670.85511,624.90772A8.719,8.719,0,0,1,684.451,635.82717l-14.33179,17.84456-13.59585-10.91946Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M636.332,660.06044l11.48163-14.29581a16.81159,16.81159,0,0,1,23.6078-2.57733l3.58734,2.88115a20.04437,20.04437,0,0,1,3.07294,28.14757l-9.45955,11.77812a6.29434,6.29434,0,0,1-8.83883.96477l-22.48639-18.05985A6.29412,6.29412,0,0,1,636.332,660.06044Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M672.56128,622.78336a5.99429,5.99429,0,1,1,9.34715,7.50713L665.87048,650.2594l-9.34715-7.50713Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M649.58579,656.16211l24.64248,19.79151a8.719,8.719,0,0,1-10.91945,13.59586L638.66633,669.758Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <ellipse cx="675.02816" cy="687.57741" rx="3.67832" ry="2.04351" transform="translate(-512.82845 594.53242) rotate(-51.23045)" fill="var(--color-accent)"/>
+                            <path d="M921.077,711.02362h-691a1,1,0,1,1,0-2h691a1,1,0,0,1,0,2Z" transform="translate(-229.07697 -188.79102)" fill="#ccc"/>
+                        </svg>
+
+                        <p class="relative text-center font-medium text-2xl"> Aucun cour ce jour </p>
+                    </div>
 
                     <div v-if="store.planning.week.weekDisplay.length">
                         <template v-for="event in store.planning.week.weekDisplay">
-                            <div class="mt-5 cursor-pointer flex flex-row">
-                                <div class="relative">
-                                    <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
-                                    <p class="text-2xl font-medium"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
-                                </div>
-        
-                                <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                                    <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-        
-                                    <p class="text-3xl font-medium"> {{ event.summary }} </p>
-                                    <p class="text-normalxl"> {{ event.teacher }} </p>
-        
-                                    <p class="text-normalxl mt-3"> {{ event.duration.text }} </p>
-                                    <p class="text-normalxl"> {{ event.location }} </p>
-                                </div>
-                            </div>
+                            <div v-scope="ClassEvent({event: event})"></div>
                         </template>
                     </div>
                 </div>
                 <!-- Week view end -->
 
-                <!-- View all start -->
-                <div class="relative -mt-5" v-if="store.planning.tabsDisplay[1]">
-                    <div v-for="events in store.planning.events">
-                        <p class="text-3xl font-medium mt-10"> {{ events[0].eventStart.string.eventFullDateName }} </p>
+                <!-- Search view start -->
+                <div class="relative h-full" v-if="store.planning.tabsDisplay == 2">
+                    <!-- Search bar start -->
+                    <input @keyup.enter="$el.blur();" @input="store.planning.search.search($el)" class="outline-none border-100 border-2 w-full rounded-full bg-800 mt-5 p-4 text-normalxl font-medium color-100" type="text" placeholder="Algèbre ..." />
+                    <!-- Search bar end -->
 
-                        <template v-for="event in events">
-                            <div class="mt-5 cursor-pointer flex flex-row">
-                                <div class="relative">
-                                    <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
-                                    <p class="text-2xl font-medium"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
-                                </div>
-        
-                                <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
-                                    <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
-        
-                                    <p class="text-3xl font-medium"> {{ event.summary }} </p>
-                                    <p class="text-normalxl"> {{ event.teacher }} </p>
-        
-                                    <p class="text-normalxl mt-3"> {{ event.duration.text }} </p>
-                                    <p class="text-normalxl"> {{ event.location }} </p>
-                                </div>
-                            </div>
-                        </template>
+                    <!-- Seach no result message -->
+                    <div class="absolute w-full top-1/2 -translate-y-1/2 mt-10" v-if="store.planning.search.events.length == 0 && !store.planning.displayLoader && store.planning.errorMessage == ''" v-cloak>
+                        <svg class="relative w-48 h-48 m-auto" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="550.71039" height="567.98584" viewBox="0 0 550.71039 567.98584" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <path d="M711.24677,733.99292H560.52137a6.616,6.616,0,0,1-6.60858-6.60839V622.00475a6.616,6.616,0,0,1,6.60858-6.60858h150.7254a6.616,6.616,0,0,1,6.60839,6.60858V727.38453A6.6161,6.6161,0,0,1,711.24677,733.99292Z" transform="translate(-324.64481 -166.00708)" fill="#CCC"/>
+                            <path d="M464.93162,459.293a11.22645,11.22645,0,0,0-3.595-16.83486l-.94985-100.813-18.84219,8.64691,4.1444,97.50067A11.2873,11.2873,0,0,0,464.93162,459.293Z" transform="translate(-324.64481 -166.00708)" fill="#9e616a"/>
+                            <path d="M464.42409,316.12137s-18.32929-8.89112-20.86418,7.88369-12.96145,60.43336-12.96145,60.43336l31.63926-2.23768Z" transform="translate(-324.64481 -166.00708)" fill="#9e616a"/>
+                            <path d="M464.93162,459.293a11.22645,11.22645,0,0,0-3.595-16.83486l-.94985-100.813-18.84219,8.64691,4.1444,97.50067A11.2873,11.2873,0,0,0,464.93162,459.293Z" transform="translate(-324.64481 -166.00708)" fill="#9e616a"/>
+                            <path d="M464.42409,316.12137s-18.32929-8.89112-20.86418,7.88369-12.96145,60.43336-12.96145,60.43336l31.63926-2.23768Z" transform="translate(-324.64481 -166.00708)" fill="var(--color-accent)"/>
+                            <path d="M411.35263,704.46626a3.61323,3.61323,0,0,1-2.61865-6.26262c.09111-.36213.15647-.62217.24758-.9843q-.0489-.11821-.09837-.23628a9.70311,9.70311,0,0,0-17.89849.06652c-2.92739,7.05051-6.65447,14.11307-7.57216,21.5678a28.7054,28.7054,0,0,0,.5039,9.87234,115.08614,115.08614,0,0,1-10.46893-47.79893,111.07991,111.07991,0,0,1,.689-12.392q.5708-5.05966,1.58377-10.0473a116.4192,116.4192,0,0,1,23.087-49.34152,30.9826,30.9826,0,0,0,12.88556-13.36893,23.6336,23.6336,0,0,0,2.14933-6.45821c-.62729.08228-1.26489.13369-1.89217.17479-.19543.01023-.40108.02055-.59651.03087l-.07369.0033a3.57989,3.57989,0,0,1-2.9401-5.83225q.40627-.5.81305-.99948c.4114-.51423.833-1.01814,1.24434-1.53228a1.7836,1.7836,0,0,0,.13369-.15432c.47313-.58619.94609-1.16206,1.41922-1.74825a10.35176,10.35176,0,0,0-3.39367-3.28044c-4.74083-2.77661-11.28133-.85358-14.70586,3.43476-3.43476,4.28826-4.0826,10.30438-2.88976,15.66218a41.48513,41.48513,0,0,0,5.73842,12.793c-.25715.32912-.52454.64792-.78161.977a117.17121,117.17121,0,0,0-12.22973,19.37481,48.70929,48.70929,0,0,0-2.908-22.62447c-2.78346-6.71479-8.00064-12.37-12.595-18.17495-5.51857-6.97261-16.83488-3.9296-17.80713,4.90927q-.01412.12837-.02757.25665,1.02363.57749,2.004,1.22586a4.9011,4.9011,0,0,1-1.976,8.91908l-.09994.01543a48.7668,48.7668,0,0,0,1.28544,7.29124A50.20988,50.20988,0,0,0,376.56347,641.273c.40108.20565.79193.41131,1.193.60673a119.598,119.598,0,0,0-6.43767,30.296,113.43525,113.43525,0,0,0,.08228,18.31542l-.03086-.216a29.97408,29.97408,0,0,0-10.23241-17.3076c-7.87438-6.46853-18.9994-8.8505-27.49446-14.04994a5.62528,5.62528,0,0,0-8.61571,5.47252q.01709.11352.03474.227a32.92633,32.92633,0,0,1,3.69184,1.779q1.02362.57761,2.004,1.22585a4.90116,4.90116,0,0,1-1.976,8.91917l-.1.01535c-.072.01031-.13369.02063-.20557.03094a48.80758,48.80758,0,0,0,8.97767,14.05786A50.25446,50.25446,0,0,0,373.9,706.63672h.01032a119.56344,119.56344,0,0,0,8.03167,23.447h28.69167c.10291-.3188.19542-.64792.288-.96672a32.59925,32.59925,0,0,1-7.93916-.473c2.12878-2.61214,4.25747-5.24483,6.38625-7.85688a1.78139,1.78139,0,0,0,.1337-.15424c1.07978-1.33685,2.16987-2.66347,3.24965-4.00032l.00058-.00165a47.75027,47.75027,0,0,0-1.39916-12.16412Z" transform="translate(-324.64481 -166.00708)" fill="#CCC"/>
+                            <path d="M834.35263,704.46626a3.61323,3.61323,0,0,1-2.61865-6.26262c.09111-.36213.15647-.62217.24758-.9843q-.0489-.11821-.09837-.23628a9.70311,9.70311,0,0,0-17.89849.06652c-2.92739,7.05051-6.65447,14.11307-7.57216,21.5678a28.7054,28.7054,0,0,0,.5039,9.87234,115.08614,115.08614,0,0,1-10.46893-47.79893,111.07991,111.07991,0,0,1,.689-12.392q.5708-5.05966,1.58377-10.0473a116.4192,116.4192,0,0,1,23.087-49.34152,30.9826,30.9826,0,0,0,12.88556-13.36893,23.6336,23.6336,0,0,0,2.14933-6.45821c-.62729.08228-1.26489.13369-1.89217.17479-.19543.01023-.40108.02055-.59651.03087l-.07369.0033a3.57989,3.57989,0,0,1-2.9401-5.83225q.40627-.5.813-.99948c.4114-.51423.833-1.01814,1.24434-1.53228a1.7836,1.7836,0,0,0,.13369-.15432c.47313-.58619.94609-1.16206,1.41922-1.74825a10.35176,10.35176,0,0,0-3.39367-3.28044c-4.74083-2.77661-11.28133-.85358-14.70586,3.43476-3.43476,4.28826-4.0826,10.30438-2.88976,15.66218a41.48513,41.48513,0,0,0,5.73842,12.793c-.25715.32912-.52454.64792-.78161.977a117.17121,117.17121,0,0,0-12.22973,19.37481,48.70929,48.70929,0,0,0-2.908-22.62447c-2.78346-6.71479-8.00064-12.37-12.595-18.17495-5.51857-6.97261-16.83488-3.9296-17.80713,4.90927q-.01412.12837-.02757.25665,1.02363.57749,2.004,1.22586a4.9011,4.9011,0,0,1-1.976,8.91908l-.09994.01543a48.7668,48.7668,0,0,0,1.28544,7.29124A50.20988,50.20988,0,0,0,799.56347,641.273c.40108.20565.79193.41131,1.193.60673a119.598,119.598,0,0,0-6.43767,30.296,113.43525,113.43525,0,0,0,.08228,18.31542l-.03086-.216a29.97408,29.97408,0,0,0-10.23241-17.3076c-7.87438-6.46853-18.9994-8.8505-27.49446-14.04994a5.62528,5.62528,0,0,0-8.61571,5.47252q.01708.11352.03474.227a32.92633,32.92633,0,0,1,3.69184,1.779q1.02362.57761,2.004,1.22585a4.90116,4.90116,0,0,1-1.976,8.91917l-.1.01535c-.072.01031-.13369.02063-.20557.03094a48.80758,48.80758,0,0,0,8.97767,14.05786A50.25446,50.25446,0,0,0,796.9,706.63672h.01032a119.56344,119.56344,0,0,0,8.03167,23.447h28.69167c.10291-.3188.19542-.64792.288-.96672a32.59925,32.59925,0,0,1-7.93916-.473c2.12878-2.61214,4.25747-5.24483,6.38625-7.85688a1.78139,1.78139,0,0,0,.1337-.15424c1.07978-1.33685,2.16987-2.66347,3.24965-4.00032l.00058-.00165a47.75027,47.75027,0,0,0-1.39916-12.16412Z" transform="translate(-324.64481 -166.00708)" fill="#CCC"/>
+                            <path d="M723.86447,729.89617c-.08252,0-.165-.00195-.24756-.0039a8.169,8.169,0,0,1-7.70215-8.25488c0-12.79493-9.13965-20.25879-18.19726-21.9795-9.05762-1.71972-20.29785,1.8711-24.98926,13.77637l-4.26514,10.707a19.67152,19.67152,0,0,1-27.78662,0l-.25244-.252.15674-.32129,75.334-154.13379v-3.77734a19.488,19.488,0,0,1,.002-3.5l-.002-388.20313a7.94627,7.94627,0,0,1,8.19043-7.94287,8.16941,8.16941,0,0,1,7.70264,8.25488v387.936a19.489,19.489,0,0,1-.00195,3.5l.00195,3.73144,75.49072,154.45606-.25244.252a19.67152,19.67152,0,0,1-27.78662,0l-.11182-.16992-4.15332-10.53711c-4.6914-11.9043-15.93017-15.49316-24.98926-13.77637-9.05761,1.72071-18.19726,9.18457-18.19726,21.9795v.3125a7.94652,7.94652,0,0,1-7.94336,7.94628Z" transform="translate(-324.64481 -166.00708)" fill="#999"/>
+                            <path d="M861.76287,446.99292H585.95965A12.10626,12.10626,0,0,1,573.867,434.90063v-192.828A12.10611,12.10611,0,0,1,585.95965,229.98H861.76287a12.10626,12.10626,0,0,1,12.09229,12.09264v192.828A12.10641,12.10641,0,0,1,861.76287,446.99292Z" transform="translate(-324.64481 -166.00708)" fill="#CCC"/>
+                            <path d="M861.76291,448.49285H585.95968a13.60791,13.60791,0,0,1-13.59277-13.59179V242.07244a13.608,13.608,0,0,1,13.59277-13.59228H861.76291a13.60791,13.60791,0,0,1,13.59228,13.59228V434.90106A13.6078,13.6078,0,0,1,861.76291,448.49285ZM585.95968,231.48016a10.60442,10.60442,0,0,0-10.59277,10.59228V434.90106a10.60463,10.60463,0,0,0,10.59277,10.59179H861.76291a10.60421,10.60421,0,0,0,10.59228-10.59179V242.07244a10.604,10.604,0,0,0-10.59228-10.59228Z" transform="translate(-324.64481 -166.00708)" fill="#CCC"/>
+                            <path d="M764.63979,242.0363H683.08263a19.52487,19.52487,0,0,1-19.5028-19.5028v-.35459H784.14258v.35459A19.52486,19.52486,0,0,1,764.63979,242.0363Z" transform="translate(-324.64481 -166.00708)" fill="#999"/>
+                            <path d="M764.99438,459.04925H683.43723a19.52509,19.52509,0,0,1-19.5028-19.5028v-.35459H784.49718v.35459A19.52509,19.52509,0,0,1,764.99438,459.04925Z" transform="translate(-324.64481 -166.00708)" fill="#999"/>
+                            <path d="M874.31485,730.88939a1.18647,1.18647,0,0,1-1.19006,1.19h-547.29a1.19,1.19,0,0,1,0-2.38h547.29A1.18651,1.18651,0,0,1,874.31485,730.88939Z" transform="translate(-324.64481 -166.00708)" fill="#ccc"/>
+                            <polygon points="184.306 537.181 198.722 537.181 205.58 481.575 184.303 481.576 184.306 537.181" fill="#9e616a"/>
+                            <path d="M504.06863,696.07669l22.78907-1.3602v9.76383l21.6662,14.96345a6.09886,6.09886,0,0,1-3.46558,11.11765H517.92709l-4.67648-9.65792-1.82593,9.65792H501.19512Z" transform="translate(-324.64481 -166.00708)" fill="#2f2e41"/>
+                            <polygon points="135.277 227.892 133.865 234.622 132.664 259.447 180.908 252.915 184.613 224.169 179.492 215.755 135.277 227.892" fill="#9e616a"/>
+                            <polygon points="111.347 537.181 125.763 537.181 132.621 481.575 111.344 481.576 111.347 537.181" fill="#9e616a"/>
+                            <path d="M428.1707,604.94848l-.00054-.14891,5.39635-25.192,3.32751-12.54128-9.24939-73.42936c-2.17782-53.34848,28.7723-78.9931,29.01588-79.24519l.67116-.69775,49.63579-1.2147c26.70628,16.00123,23.683,103.51941,28.57341,163.039.34872,4.24414,4.73124,10.50859,3.654,14.54583-8.54582,32.02677-6.04255,66.6612-12.553,67.685l-19.96125-.27744-10.30939-46.78874,9.51636-35.68634c-4.22057-.77752-7.13727-21.41179-7.13727-21.41179-1.83905-2.18368-8.1881-20.75593-8.1881-20.75593l-8.46552-51.40977-13.601,88.42417,3.27551,20.74438-2.71071,7.13285-11.60823,58.88563-.12339.94878L435.44348,655.37Z" transform="translate(-324.64481 -166.00708)" fill="#2f2e41"/>
+                            <path d="M431.10991,696.07669l22.78906-1.3602v9.76383l21.6662,14.96345a6.09886,6.09886,0,0,1-3.46557,11.11765H444.96836l-4.67648-9.65792-1.82593,9.65792H428.23639Z" transform="translate(-324.64481 -166.00708)" fill="#2f2e41"/>
+                            <path d="M499.72323,296.81336l12.16793,13.51992,14.61521,27.54745-7.17925,33.96819,3.13895,15.93971,4.635,17.52209c-17.8595,9.87926-39.074-3.76443-58.5635-9.82419l-19.176,8.4722,1.014-23.32186.52-58.76042a16.46939,16.46939,0,0,1,17.73187-16.27514h0l12.84392-9.464Z" transform="translate(-324.64481 -166.00708)" fill="var(--color-accent)"/>
+                            <circle cx="171.67023" cy="98.07194" r="25.65727" fill="#9e616a"/>
+                            <path d="M526.50637,254.81959c-.452,2.51394-11.2531,3.72725-10.928-.74545-2.10149,4.211-5.24175,10.322-1.24175,17.322a10.98281,10.98281,0,0,0-1.48157,12.81309,33.15262,33.15262,0,0,1,2.847,5.84463,8.87535,8.87535,0,0,1,.32512,1.51466,2.89763,2.89763,0,0,1-4.12372,2.97386c-10.88039-5.32913-29.85434-4.42589-41.75772-1.17444q.119-3.47344-.09516-6.93107a17.13363,17.13363,0,0,1-3.37832,7.91442c-2.03809.60271-4.03649,1.22919-5.97148,1.84777a1.71539,1.71539,0,0,1-2.18084-2.09361,9.64658,9.64658,0,0,0,.2062-4.203c-.49172-2.90252-1.95087-5.52745-2.9818-8.27924s-1.61781-5.916-.35687-8.57264c1.95876-4.12377,7.47826-5.38471,9.91287-9.24676,2.736-4.33784.61065-9.99215,1.03886-15.1072.60271-7.23243,6.52662-13.10875,13.204-15.94781,11.56233-4.9168,26.02719-.935,34.695,8.15314a7.93768,7.93768,0,0,1,8.303-.35687c2.56152,1.37192,4.4013,2.08567,5.5512,4.75817C529.09959,247.65062,526.96634,252.29776,526.50637,254.81959Z" transform="translate(-324.64481 -166.00708)" fill="#2f2e41"/>
+                            <path d="M515.48591,556.53986l-60.36453-60.36452a3.7472,3.7472,0,0,1-.00008-5.29331l42.20391-42.20391a3.74715,3.74715,0,0,1,5.29338,0l60.36453,60.36453a3.7472,3.7472,0,0,1-.00008,5.29331l-42.2039,42.2039A3.74724,3.74724,0,0,1,515.48591,556.53986Z" transform="translate(-324.64481 -166.00708)" fill="#CCC"/>
+                            <path d="M518.13254,558.63348a4.71009,4.71009,0,0,1-3.35352-1.38672L454.41427,496.8825a4.74593,4.74593,0,0,1,0-6.707l42.20411-42.2041a4.74649,4.74649,0,0,1,6.70752,0l60.36425,60.36426a4.7459,4.7459,0,0,1,0,6.707l-42.2041,42.2041A4.71009,4.71009,0,0,1,518.13254,558.63348ZM499.97189,448.58367a2.71951,2.71951,0,0,0-1.939.80176l-42.20459,42.2041a2.74665,2.74665,0,0,0,0,3.87891l60.36474,60.36426a2.81453,2.81453,0,0,0,3.87891,0l42.2041-42.2041a2.74665,2.74665,0,0,0,0-3.87891l-60.36475-60.36426A2.72144,2.72144,0,0,0,499.97189,448.58367Z" transform="translate(-324.64481 -166.00708)" fill="#"/>
+                            <path d="M492.74166,454.293a11.22642,11.22642,0,0,1,3.595-16.83486l.94985-100.813,18.84219,8.64691-4.1444,97.50067A11.2873,11.2873,0,0,1,492.74166,454.293Z" transform="translate(-324.64481 -166.00708)" fill="#9e616a"/>
+                            <path d="M493.24918,311.12137s18.3293-8.89112,20.86419,7.88369,12.96145,60.43336,12.96145,60.43336l-31.63926-2.23768Z" transform="translate(-324.64481 -166.00708)" fill="#9e616a"/>
+                            <path d="M492.74166,454.293a11.22642,11.22642,0,0,1,3.595-16.83486l.94985-100.813,18.84219,8.64691-4.1444,97.50067A11.2873,11.2873,0,0,1,492.74166,454.293Z" transform="translate(-324.64481 -166.00708)" fill="#9e616a"/>
+                            <path d="M493.24918,311.12137s18.3293-8.89112,20.86419,7.88369,12.96145,60.43336,12.96145,60.43336l-31.63926-2.23768Z" transform="translate(-324.64481 -166.00708)" fill="var(--color-accent)"/>
+                        </svg>
+
+                        <p class="relative text-center font-medium text-normalxl mt-5"> Aucun événements ne correspond à votre recherche </p>
+                    </div>
+
+                    <div v-if="store.planning.search.events.length">
+                        <div v-for="events in store.planning.search.events">
+                            <p class="text-3xl font-medium mt-10"> {{ events[0].eventStart.string.eventFullDateName }} </p>
+                            
+                            <template v-for="event in events">
+                                <div v-scope="ClassEvent({event: event})"></div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search view end -->
+
+                <!-- View all start -->
+                <div class="relative h-full" v-if="store.planning.tabsDisplay == 1">
+                    <div class="relative" v-if="store.planning.events.length">
+                        <div v-for="events in store.planning.events">
+                            <p class="text-3xl font-medium mt-10"> {{ events[0].eventStart.string.eventFullDateName }} </p>
+                            
+                            <template v-for="event in events">
+                                <div v-scope="ClassEvent({event: event})"></div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="absolute w-full top-1/2 -translate-y-1/2 mt-1" v-if="store.planning.events.length == 0 && !store.planning.displayLoader && store.planning.errorMessage == ''" v-cloak>
+                        <svg class="relative w-64 h-64 m-auto" xmlns="http://www.w3.org/2000/svg" width="741.84606" height="522.41797" viewBox="0 0 741.84606 522.41797" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <path d="M520.793,516.6474a10.74264,10.74264,0,0,0-10.95628-12.30071l-68.80437-69.56692-13.59213,19.00109,71.90643,62.40721a10.80091,10.80091,0,0,0,21.44635.45933Z" transform="translate(-229.07697 -188.79102)" fill="#ffb8b8"/>
+                            <path d="M488.20078,476.47743l-17.5613,17.542a4.51352,4.51352,0,0,1-6.335.02552L416.317,446.86677a17.603,17.603,0,1,1,24.93713-24.849l46.98661,48.13244A4.51547,4.51547,0,0,1,488.20078,476.47743Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <circle cx="197.53395" cy="177.02015" r="24.56103" fill="#ffb8b8"/>
+                            <polygon points="114.543 471.345 120.762 481.91 164.474 462.951 155.295 447.357 114.543 471.345" fill="#ffb8b8"/>
+                            <path d="M345.48345,655.41085l12.24733,20.80687.00049.00085a15.386,15.386,0,0,1-5.45551,21.06459l-.4309.25361-20.05237-34.067Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <polygon points="186.6 509.407 198.86 509.407 204.692 462.119 186.598 462.12 186.6 509.407" fill="#ffb8b8"/>
+                            <path d="M412.55,694.1958l24.1438-.001h.001a15.38605,15.38605,0,0,1,15.38647,15.38623v.5l-39.53052.00146Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M366.38843,669.54838a4.49319,4.49319,0,0,1-3.624-1.833l-11.82373-16.0586a4.4996,4.4996,0,0,1,1.12452-6.41015l52.614-35.1416-31.74658-83.47461,67.88916,5.60254,2.28662,71.7334a36.04577,36.04577,0,0,1-18.04517,32.42382l-56.42651,32.55371A4.48594,4.48594,0,0,1,366.38843,669.54838Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M416.04712,688.59818a4.49988,4.49988,0,0,1-4.48877-4.33984l-2.488-69.88184,30.80835-1.623-2.45312,70.38379a4.48729,4.48729,0,0,1-4.19971,4.333l-16.8728,1.11817C416.25073,688.59525,416.14868,688.59818,416.04712,688.59818Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M448.67871,546.1099c-7.83838,0-35.21655-8.81641-44.72119-11.959-1.42188,1.13769-9.23315,6.97851-18.35107,5.91113-5.626-.66016-10.57886-3.84473-14.721-9.46582-9.147-12.41406,2.15063-65.65137,13.239-108.126a34.26782,34.26782,0,0,1,40.52857-24.87988h0a34.57136,34.57136,0,0,1,26.08764,25.37793c2.08765,8.498.29175,18.49414-1.01953,25.79394-.61645,3.43164-1.10351,6.14258-.937,7.47461.64355,5.14844,4.21875,85.8916,1.91992,89.33985C450.45923,545.94388,449.75122,546.1099,448.67871,546.1099Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M420.00379,546.25292a10.74266,10.74266,0,0,0,.9416-16.44569l.48533-97.84356-23.04478,3.8374,6.76925,94.97037a10.80091,10.80091,0,0,0,14.8486,15.48148Z" transform="translate(-229.07697 -188.79102)" fill="#ffb8b8"/>
+                            <path d="M425.33374,494.79935H400.512a4.51352,4.51352,0,0,1-4.5-4.459l-.60937-67.292a17.603,17.603,0,1,1,35.2041.043l-.77319,67.25976A4.51547,4.51547,0,0,1,425.33374,494.79935Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M420.35705,390.26988c-11.24529.02059-21.85416-8.868-23.80286-19.94323a28.67148,28.67148,0,0,1,.91927-13.01372,34.95394,34.95394,0,0,1,47.93529-21.95277c3.00832,1.36131,5.97146,3.31644,7.3489,6.31741s.51536,7.19528-2.49791,8.5456c-1.96915.88243-4.44022.4491-6.18718,1.71574-2.50929,1.81936-1.86334,5.69129-.74286,8.58112s2.38775,6.38691.50946,8.85239c-1.75023,2.29738-5.24872,2.22609-8.00435,1.36136s-5.47558-2.31276-8.34865-2.01821c-4.19039.4296-7.20172,4.59773-7.7591,8.77305s.75474,8.34892,2.05018,12.35714Z" transform="translate(-229.07697 -188.79102)" fill="#2f2e41"/>
+                            <path d="M727.69556,415.33663c0-67.16541,54.44832-226.54561,121.61373-226.54561S970.923,348.17122,970.923,415.33663a121.61373,121.61373,0,1,1-243.22747,0Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M849.30925,711.209a1,1,0,0,1-1-1V290.9248a1,1,0,0,1,2,0V710.209A1,1,0,0,1,849.30925,711.209Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M849.30925,371.87061a.99683.99683,0,0,1-.70715-.293l-48.13452-48.13428a1,1,0,0,1,1.41431-1.41406l48.13452,48.13427a1,1,0,0,1-.70716,1.707Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M849.30925,455.20068a1,1,0,0,1-.70715-1.707l80.61-80.61035a1,1,0,0,1,1.4143,1.41406l-80.61,80.61035A.997.997,0,0,1,849.30925,455.20068Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M512.75454,516.07833c15.95481-3.60678,34.03035,8.87341,34.59062,25.62768.15759,4.71249-1.22354,9.66138-4.84973,12.86729-2.99372,2.64675-7.44863,3.9815-11.3187,2.68784-7.44737-2.48945-7.845-12.86687-3.85-18.40942,5.40939-7.50479,16.12575-8.78623,24.62919-7.89363,10.3961,1.09127,20.27689,5.64956,28.56833,11.89757,16.5987,12.50793,27.168,31.67789,35.72289,50.19942a253.09711,253.09711,0,0,1,18.95912,59.57906q.72364,3.8748,1.32589,7.77061a1.51056,1.51056,0,0,0,1.8598,1.02108,1.53833,1.53833,0,0,0,1.02107-1.8598,256.43885,256.43885,0,0,0-19.2345-65.06188c-8.95744-20.07249-20.2501-40.89324-38.21465-54.28884-8.95541-6.67776-19.53073-11.32453-30.72247-12.31825-9.42172-.83656-20.57851,1.15666-26.43759,9.351-4.62229,6.46462-4.15275,17.20837,2.9993,21.71061,3.932,2.47519,8.9283,2.186,13.011.26156a16.66327,16.66327,0,0,0,8.786-10.89127c2.5395-9.30518-1.31669-19.36986-7.92811-26.021a33.31988,33.31988,0,0,0-23.45167-9.86212,29.53,29.53,0,0,0-6.30452.75164c-1.88353.42579-1.04178,3.306.83872,2.88088Z" transform="translate(-229.07697 -188.79102)" fill="#ccc"/>
+                            <path d="M589.698,700.34085l-9.91475-16.92813,12.22567-7.16079,9.91474,16.92759v.00053a7.0842,7.0842,0,0,1-12.22566,7.1608Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <circle cx="327.83846" cy="467.64477" r="8.71897" fill="var(--color-accent)"/>
+                            <path d="M628.05951,700.34085l-9.91474-16.92813,12.22539-7.16079,9.91475,16.92759a7.08423,7.08423,0,0,1-12.2254,7.16133Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M558.572,674.00087a18.5487,18.5487,0,0,1,18.52781-18.52781h58.65109a7.84026,7.84026,0,0,1,7.83106,7.83132v6.67387a22.57592,22.57592,0,0,1-22.55044,22.55044H577.09978A18.5487,18.5487,0,0,1,558.572,674.00087Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M572.09744,702.52378V682.9061h14.16833v19.61768a7.08416,7.08416,0,1,1-14.16833,0Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M613.21,702.52378V682.9061h14.16833v19.61768a7.08417,7.08417,0,1,1-14.16833,0Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M670.85511,624.90772A8.719,8.719,0,0,1,684.451,635.82717l-14.33179,17.84456-13.59585-10.91946Z" transform="translate(-229.07697 -188.79102)" fill="var(--color-accent)"/>
+                            <path d="M636.332,660.06044l11.48163-14.29581a16.81159,16.81159,0,0,1,23.6078-2.57733l3.58734,2.88115a20.04437,20.04437,0,0,1,3.07294,28.14757l-9.45955,11.77812a6.29434,6.29434,0,0,1-8.83883.96477l-22.48639-18.05985A6.29412,6.29412,0,0,1,636.332,660.06044Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M672.56128,622.78336a5.99429,5.99429,0,1,1,9.34715,7.50713L665.87048,650.2594l-9.34715-7.50713Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <path d="M649.58579,656.16211l24.64248,19.79151a8.719,8.719,0,0,1-10.91945,13.59586L638.66633,669.758Z" transform="translate(-229.07697 -188.79102)" fill="#3f3d56"/>
+                            <ellipse cx="675.02816" cy="687.57741" rx="3.67832" ry="2.04351" transform="translate(-512.82845 594.53242) rotate(-51.23045)" fill="var(--color-accent)"/>
+                            <path d="M921.077,711.02362h-691a1,1,0,1,1,0-2h691a1,1,0,0,1,0,2Z" transform="translate(-229.07697 -188.79102)" fill="#ccc"/>
+                        </svg>
+
+                        <p class="relative text-center font-medium text-2xl"> Votre planning est vide </p>
                     </div>
                 </div>
                 <!-- View all end -->
+
+                <!-- Add planning button start -->
+                <div v-scope="GotoButton({ pageName: 'add-planning-page' })" @click="clicked" class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-full p-5 rounded-lg bg-accent -mt-5 cursor-pointer" v-if="store.planning.showAddPlanningButton">
+                    <p class="text-2xl whitespace-nowrap"> Ajouter un emploi du temps </p>
+                </div>
+                <!-- Add planning button end -->
 
                 <!-- Planning loader start -->
                 <div class="relative flex flex-col" v-if="store.planning.displayLoader">
@@ -298,6 +377,334 @@
         </div> 
         <!-- end of planning page -->
 
+        <!-- Add planning page start -->
+        <div id="add-planning-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'add-planning-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+            <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
+                <div class="w-full flex flex-row">
+                    <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton()" @click="clicked">
+                        <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/>
+                    </svg>
+                    <p class="flex-1 ml-4 mt-1 text-3xl font-bold"> Ajouter un emploi du temps </p>
+                </div>
+                <!-- Page header end -->
+
+                <!-- Explanation text end -->
+                <p class="mt-5 text-normalxl">
+                    Pour ajouter un emploi du temps, renseignez l'url dans le champ ci-dessous. <br /> <br />
+
+                    <span class="color-accent"> Note: </span>
+                    vous pouvez ajouter plusieurs emploi du temps en même temps. 
+                    Pratique pour voir du premier coup d'oeil l'entièreté de votre journée. <br /> <br />
+
+                    Pour avoir plusieurs emploi du temps sur la page d'accueil, répétez simplement l'opération plusieurs fois avec une url différente.
+                </p>
+                <!-- Explanation text end -->
+
+                <div class="flex flex-row">
+                    <p class="text-3xl font-medium mt-7 flex-1"> Entrez votre url </p>
+                    <div class="ring-loader small-loader" v-if="store.addPlanning.displayLoader == true"><div class="animate-spin"></div></div>
+                </div>
+
+                <!-- Url form starts -->
+                <input v-bind:value="store.addPlanning.url" @keyup.enter="store.addPlanning.add()" @input="store.addPlanning.url = $el.value" class="mt-5 rounded-lg color-100 border-100 border-2 p-4 text-normalxl font-medium w-full bg-800" type="url" placeholder="Url de l'emploi du temps ..." spellcheck="false" autocapitalize="off" />
+                
+                <!-- Send button start -->
+                <div class="relative p-5 rounded-lg bg-accent mt-5 text-center cursor-pointer" @click="store.addPlanning.add()" v-if="!store.addPlanning.displayLoader">
+                    <p class="text-2xl whitespace-nowrap"> Ajouter l'emploi du temps </p>
+                </div>
+                <!-- Send button end -->
+
+                <!-- Error message start -->
+                <p class="text-red-500 mt-10 text-2xl text-center ml-5 mr-5" v-if="!store.addPlanning.displayLoader"> {{ store.addPlanning.errorMessage }} </p>
+            </div>
+        </div>
+        <!-- Add planning page end -->
+
+        <!-- Event content page start -->
+        <div id="add-planning-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'event-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+            <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
+                <div class="w-full flex flex-row">
+                    <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton()" @click="clicked">
+                        <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/>
+                    </svg>
+                    <p class="flex-1 ml-4 mt-1 text-3xl font-bold"> {{ store.eventContent.event.summary }} </p>
+                </div>
+                <!-- Page header end -->
+
+                <div v-if="store.eventContent.event" v-effect="if(store.eventContent.event) { update(store.eventContent.event) }" v-scope="ClassEvent({event: store.eventContent.event})"></div>
+
+                <!-- Edit note start -->
+                <div class="rounded-lg bg-800 p-5 mt-5">
+                    <p class="text-2xl font-medium"> Gestion des notes </p>
+
+                    <!-- Note content display -->
+                    <div v-if="store.eventContent.hasNote && !store.eventContent.showInput" v-bind:style="{ backgroundColor: (store.planning.eventColors[store.eventContent.event.categoryId] ? store.planning.eventColors[store.eventContent.event.categoryId] : 'var(--color-accent)') }" class="rounded-lg p-4 text-normalxl mt-4 mb-2">
+                        <p> {{ store.eventContent.noteContent }} </p>
+                    </div>
+
+                    <input @keyup.enter="store.eventContent.addNote()" @input="store.eventContent.noteContent = $el.value" v-if="store.eventContent.showInput" v-bind:value="store.eventContent.noteContent" type="text" placeholder="Prof absent ..." class="rounded-lg border-2 border-100 p-3 bg-800 text-normalxl color-100 w-full mt-4" />
+                    
+                    <!-- Add note button start -->
+                    <div v-if="!store.eventContent.hasNote && !store.eventContent.showInput" @click="store.eventContent.showInput = true" v-bind:style="{ backgroundColor: (store.planning.eventColors[store.eventContent.event.categoryId] ? store.planning.eventColors[store.eventContent.event.categoryId] : 'var(--color-accent)') }" class="color-100 p-4 mt-4 w-full rounded-lg text-normalxl text-center">
+                        <p> Ajouter une note </p>
+                    </div>
+                    <!-- Add note button end -->
+
+                    <!-- Edit / delete note button start -->
+                    <div v-if="store.eventContent.hasNote && !store.eventContent.showInput" class="flex flex-1 w-full gap-3">
+                        <div @click="store.eventContent.deleteNote()" class="bg-800 color-100 border-2 p-4 mt-4 flex-1 rounded-lg text-normalxl text-center">
+                            <p> Supprimer </p>
+                        </div>
+
+                        <div @click="store.eventContent.showInput = true" v-bind:style="{ backgroundColor: (store.planning.eventColors[store.eventContent.event.categoryId] ? store.planning.eventColors[store.eventContent.event.categoryId] : 'var(--color-accent)') }" class="color-100 p-4 mt-4 flex-1 rounded-lg text-normalxl text-center">
+                            <p> Editer </p>
+                        </div>
+                    </div>
+                    <!-- Edit / delete note button end -->
+
+                    <!-- Cancel / save note button start -->
+                    <div v-if="store.eventContent.showInput" class="flex flex-1 w-full gap-3">
+                        <div @click="store.eventContent.showInput = false" class="bg-800 color-100 border-2 p-4 mt-4 flex-1 rounded-lg text-normalxl text-center">
+                            <p> Annuler </p>
+                        </div>
+
+                        <div @click="store.eventContent.addNote()" v-bind:style="{ backgroundColor: (store.planning.eventColors[store.eventContent.event.categoryId] ? store.planning.eventColors[store.eventContent.event.categoryId] : 'var(--color-accent)') }" class="color-100 p-4 mt-4 flex-1 rounded-lg text-normalxl text-center">
+                            <p> Enregistrer </p>
+                        </div>
+                    </div>
+                    <!-- Cancel / save note button end -->
+                </div>
+                <!-- Edit note end -->
+
+                <!-- Event display selection start -->
+                <div class="rounded-lg bg-800 p-5 mt-5">
+                    <p class="text-2xl font-medium"> Affichage </p>
+
+                    <div @click="store.eventContent.hideElement()" v-bind:style="{ backgroundColor: (store.planning.eventColors[store.eventContent.event.categoryId] ? store.planning.eventColors[store.eventContent.event.categoryId] : 'var(--color-accent)') }" class="color-100 p-4 mt-4 w-full rounded-lg text-normalxl text-center">
+                        <p> Cache uniquement cet événement </p>
+                    </div>
+
+                    <div @click="store.eventContent.hideAllElements()" v-bind:style="{ backgroundColor: (store.planning.eventColors[store.eventContent.event.categoryId] ? store.planning.eventColors[store.eventContent.event.categoryId] : 'var(--color-accent)') }" class="color-100 p-4 mt-4 w-full rounded-lg text-normalxl text-center">
+                        <p> Cache tous les événements de ce type </p>
+                    </div>
+                </div>
+                <!-- Event display selection end -->
+
+                <!-- Event color selection start -->
+                <div class="rounded-lg bg-800 p-5 mt-5">
+                    <p class="text-2xl font-medium"> Couleur de l'événement </p>
+
+                    <div class="flex flex-row mt-5 items-center justify-center">
+                        <div @click="store.eventContent.chooseEventColor(0)" v-bind:style="{ backgroundColor: store.accentColor.colors[0] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.eventContent.chooseEventColor(1)" v-bind:style="{ backgroundColor: store.accentColor.colors[1] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.eventContent.chooseEventColor(2)" v-bind:style="{ backgroundColor: store.accentColor.colors[2] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.eventContent.chooseEventColor(3)" v-bind:style="{ backgroundColor: store.accentColor.colors[3] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                    </div>
+
+                    <div class="flex flex-row mt-5 items-center justify-center">
+                        <div @click="store.eventContent.chooseEventColor(4)" v-bind:style="{ backgroundColor: store.accentColor.colors[4] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.eventContent.chooseEventColor(5)" v-bind:style="{ backgroundColor: store.accentColor.colors[5] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.eventContent.chooseEventColor(6)" v-bind:style="{ backgroundColor: store.accentColor.colors[6] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.eventContent.chooseEventColor(7)" v-bind:style="{ backgroundColor: store.accentColor.colors[7] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                    </div>
+                </div>
+                <!-- Event color selection end -->
+            </div>
+        </div>
+        <!-- Event content page end -->
+
+        <!-- Mail page start -->
+        <div id="mail-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'mail-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+            <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
+                <p class="text-3xl mt-1 font-bold">
+                    Vous avez <span class="color-accent"> 0 mails </span> non lu !
+                </p>
+
+                <svg class="absolute top-0 left-full -translate-x-full mt-4 -ml-6 h-14 aspect-square cursor-pointer" v-scope="GotoButton({ pageName: 'add-planning-page' })" @click="clicked" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M448.08 256.08c0-106-86-192-192-192s-192 86-192 192 86 192 192 192 192-85.97 192-192z" fill="none" stroke-miterlimit="10" stroke-width="32" stroke="var(--color-100)" />
+                    <path d="M300.81 358.29c-20.83 7.42-34.05 9.59-54.19 9.59-61.17 0-106.39-50.07-101-111.84S205 144.21 266.14 144.21c68.92 0 106.79 45.55 101.47 106.55-4 45.54-32.8 58.66-47.89 56-14.2-2.55-25.92-15.52-23.75-40.35l5.62-44.66c-7.58-9.17-28.11-18-49.93-14.54C231.77 210.3 209 228 206.56 256s14.49 50.84 39.93 50.84 47.86-18.39 50.69-50.84" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="28" stroke="var(--color-100)" />
+                </svg>
+                <!-- Page header end -->
+
+                <!-- View navigator start -->
+                <div class="flex flex-row pb-5 mt-7 overflow-x-auto">
+                    <template v-for="(tabName, index) in store.mail.sortBoxes()">
+                        <p class="p-2 pl-5 pr-5 rounded-full border-2 text-2xl whitespace-nowrap" v-bind:class="{ 'ml-3': index != 0, 'bg-accent': store.mail.tabsDisplay == index, 'border-accent': store.mail.tabsDisplay == index, 'border-100': store.mail.tabsDisplay != index }" @click="store.mail.changeSelectedTab(index)"> {{ tabName }} </p>
+                    </template>
+                </div>
+                <!-- View navigator end -->
+
+                <!-- Mail view start -->
+                <div class="relative mt-9">
+                    <div v-if="!store.mail.displayLoader && store.mail.tabName != ''" class="-mt-4">
+                        <template v-effect="store.mail.tabName" v-for="(mailId, index) in store.mail.hierarchy[store.mail.tabName]" :key="mailId.id">
+                            <div v-scope="MailMessage({messageId: mailId, box: store.mail.tabName })"></div>
+                        </template>
+                    </div>
+                </div>
+                <!-- Mail view end -->
+
+                <!-- No mail -->
+                <div class="absolute w-full top-1/2 -translate-y-1/2 mt-10" v-if="store.mail.tabName != '' && store.mail.hierarchy[store.mail.tabName].length == 0 && !store.mail.displayLoader" v-cloak>
+                    <!-- <img class="relative w-48 h-48 m-auto" src="assets/images/illustrations/no-mail.svg" /> -->
+
+                    <svg class="relative w-48 h-48 m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576.49928 493.5" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M481.17233,691.60038c9.25458-7.82,14.87595-20.17341,13.40175-32.19951s-10.605-23.08177-22.44888-25.63556-25.34517,4.51552-28.94256,16.08527c-1.97981-22.306-4.26119-45.54663-16.12049-64.54228-10.73831-17.2001-29.33726-29.50744-49.49431-31.70921s-41.37985,6.11408-53.95107,22.0238-15.64923,39.03914-6.84467,57.3048c6.486,13.45569,18.43551,23.46957,30.95562,31.61638a199.78578,199.78578,0,0,0,136.64075,29.89252" transform="translate(-311.75036 -203.25)" fill="#f2f2f2"/>
+                        <path d="M343.54974,560.17414A326.87926,326.87926,0,0,1,389.10355,605.409a327.83254,327.83254,0,0,1,51.30832,85.74145c.92389,2.264-2.75246,3.24952-3.66608,1.0107a324.46215,324.46215,0,0,0-29.64717-56.09367,325.69973,325.69973,0,0,0-66.23723-73.20495c-1.898-1.54556.806-4.22115,2.68835-2.68834Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M487.56461,691.60038c-9.25458-7.82-14.87595-20.17341-13.40175-32.19951s10.605-23.08177,22.44888-25.63556,25.34518,4.51552,28.94256,16.08527c1.97982-22.306,4.26119-45.54663,16.1205-64.54228,10.7383-17.2001,29.33725-29.50744,49.49431-31.70921s41.37984,6.11408,53.95106,22.0238,15.64923,39.03914,6.84468,57.3048c-6.486,13.45569-18.43552,23.46957-30.95563,31.61638a199.78578,199.78578,0,0,1-136.64075,29.89252" transform="translate(-311.75036 -203.25)" fill="#f2f2f2"/>
+                        <path d="M625.18721,560.17414A326.87878,326.87878,0,0,0,579.63339,605.409a327.83254,327.83254,0,0,0-51.30832,85.74145c-.92389,2.264,2.75246,3.24952,3.66608,1.0107a325.98749,325.98749,0,0,1,95.8844-129.29862c1.898-1.54556-.806-4.22115-2.68834-2.68834Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <circle cx="203.27678" cy="191" r="31" fill="#f2f2f2"/><path d="M419.4457,287.3877H633.02714V299.073H446.71128a83.41834,83.41834,0,0,0-83.41857,83.41839V515.25H339.92222a3.89516,3.89516,0,0,1-3.89508-3.89508V370.80609A83.41833,83.41833,0,0,1,419.4457,287.3877Z" transform="translate(-311.75036 -203.25)" fill="#f2f2f2"/>
+                        <path d="M460.52714,692.25V514.75h52v177.5a4.50508,4.50508,0,0,1-4.5,4.5h-43A4.50508,4.50508,0,0,1,460.52714,692.25Z" transform="translate(-311.75036 -203.25)" fill="#3f3d56"/>
+                        <path d="M325.02714,511.25V366.91553A86.76355,86.76355,0,0,1,411.69242,280.25H632.02714v236h-302A5.00573,5.00573,0,0,1,325.02714,511.25Zm305-229H411.69242a84.76141,84.76141,0,0,0-84.66528,84.66553V511.25a3.00328,3.00328,0,0,0,3,3h300Z" transform="translate(-311.75036 -203.25)" fill="#3f3d56"/>
+                        <path d="M515.02714,410.25a18.02031,18.02031,0,0,1-18-18v-129a3.00328,3.00328,0,0,0-3-3h-70a5.0058,5.0058,0,0,1-5-5v-47a5.0058,5.0058,0,0,1,5-5h104a5.00573,5.00573,0,0,1,5,5v184A18.02031,18.02031,0,0,1,515.02714,410.25Z" transform="translate(-311.75036 -203.25)" fill="var(--color-accent)"/>
+                        <path d="M640.02714,278.25h0a56.88093,56.88093,0,0,1,57,56.76144V499.32108h112a16.96465,16.96465,0,0,1,17,16.92887h-243V335.01143A56.88093,56.88093,0,0,1,640.02714,278.25Z" transform="translate(-311.75036 -203.25)" fill="#3f3d56"/>
+                        <path d="M626.34909,371.81749l11.80284,48.75606L869.03313,364.682l-11.80284-48.75606a3.6384,3.6384,0,0,0-2.35767-2.59508,3.59409,3.59409,0,0,0-1.33406-.20075L720.07937,244.02819a3.682,3.682,0,0,0-4.65628,1.11925l-64.31987,89.69375L626.85528,368.664a.51379.51379,0,0,0-.089.41825A3.64176,3.64176,0,0,0,626.34909,371.81749Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M626.7663,369.08226a.48973.48973,0,0,0,.20314.31583.55943.55943,0,0,0,.43331.08552.53586.53586,0,0,0,.29889-.20727l.08326-.11537,1.26254-1.76554,22.92889-31.96427,64.30082-89.6732a2.6198,2.6198,0,0,1,3.32194-.79624l132.42537,68.56666,1.18838.6168a1.29216,1.29216,0,0,0,.14733.05165,1.61549,1.61549,0,0,1,.27147-.026.51364.51364,0,0,0,.28983-.24474.524.524,0,0,0-.21883-.7087l-.16408-.08726L720.07937,244.02819a3.682,3.682,0,0,0-4.65628,1.11925l-64.31987,89.69375L626.85528,368.664A.51379.51379,0,0,0,626.7663,369.08226Z" transform="translate(-311.75036 -203.25)" fill="#3f3d56"/>
+                        <path d="M696.10724,374.05386l5.13934.57012,38.14252,4.22535,25.28583,2.79936,1.49358.166,31.55217-24.64477,1.20883-.944,7.45235-5.82019,26.5135-20.70629.15919-1.45441,9.43044-85.11413a4.4539,4.4539,0,0,0-3.92912-4.91152L712.7,224.27763a4.456,4.456,0,0,0-4.91157,3.9292L701.138,288.24439l-3.689,33.28581L694.149,351.30867l-1.52976,13.82919-.44637,4.00573A4.45691,4.45691,0,0,0,696.10724,374.05386Z" transform="translate(-311.75036 -203.25)" fill="#e6e6e6"/>
+                        <path d="M730.69234,299.44776l54.51668,6.03806,19.33354,2.14069a6.53968,6.53968,0,1,0,1.43979-12.99988l-24.04683-2.66322-49.79941-5.52188a6.54306,6.54306,0,0,0-1.44377,13.00623Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M727.58833,323.56377c.14068.02515.28136.05031.42455.06411l63.28515,7.0109,10.5663,1.17291a6.54214,6.54214,0,0,0,1.43855-13.005l-15.27834-1.69033-50.13045-5.5548-8.43621-.93485a6.53913,6.53913,0,0,0-1.86955,12.937Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M720.42587,344.94759a6.53866,6.53866,0,0,0,4.88047,3.12537l25.9387,2.87281,46.19708,5.118.01018-.00247,1.47721.16462,7.45235-5.82019a6.47057,6.47057,0,0,0,.0011-1.33,6.5548,6.5548,0,0,0-5.78686-5.82386l-6.41729-.713-25.457-2.81712-18.31689-2.0315-23.66022-2.62223a6.54,6.54,0,0,0-6.31878,9.87953Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M756.8588,269.96954l13.5644,1.50232,5.99124.66537,9.05013,1.00159a6.54214,6.54214,0,0,0,1.43855-13.005l-28.59932-3.16545a6.54059,6.54059,0,1,0-1.445,13.00113Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M645.9437,306.1818l16.53736,68.3138,27.60123,5.24823,25.532,4.86089,27.39356,5.21238,8.753,1.6657a3.6733,3.6733,0,0,0,2.93957-.71161l7.02206-5.48451,4.44605-3.472,31.55217-24.64477-20.062-82.87362a4.40272,4.40272,0,0,0-1.24424-2.15908,4.44864,4.44864,0,0,0-4.12489-1.11718L649.22,300.81267A4.45037,4.45037,0,0,0,645.9437,306.1818Z" transform="translate(-311.75036 -203.25)" fill="var(--color-accent)"/>
+                        <path d="M683.86407,360.52788a6.54613,6.54613,0,0,0,7.89577,4.818l72.2144-17.48162a6.54974,6.54974,0,0,0,4.818-7.89578,2.09959,2.09959,0,0,0-.0705-.24672,6.53879,6.53879,0,0,0-7.82527-4.5713l-72.2144,17.48161A6.54613,6.54613,0,0,0,683.86407,360.52788Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M690.08229,379.74383l25.532,4.86089L769.69885,371.512a6.54051,6.54051,0,1,0-3.07775-12.7138l-72.21439,17.48162a6.49388,6.49388,0,0,0-3.74749,2.51147A6.5835,6.5835,0,0,0,690.08229,379.74383Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M743.00785,389.8171l8.753,1.6657a3.6733,3.6733,0,0,0,2.93957-.71161l7.02206-5.48451Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M698.41482,323.89664a6.54611,6.54611,0,0,0,7.89577,4.818l27.97037-6.77105a6.54973,6.54973,0,0,0,4.818-7.89577,6.46594,6.46594,0,0,0-1.20489-2.48625,6.5454,6.5454,0,0,0-6.69088-2.33178l-27.97037,6.77105a6.54142,6.54142,0,0,0-4.818,7.89577Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M715.61222,384.60434l27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm81.83767-28.539.26672,1.10181,1.21521-.9448Zm-81.83767,28.539,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm0,0,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm-89.26313-12.78685,30.916,127.71019a3.66655,3.66655,0,0,0,4.42206,2.69835l223.76079-54.16788a3.6663,3.6663,0,0,0,2.69835-4.42206l-30.916-127.71018a3.6384,3.6384,0,0,0-2.35767-2.59508,3.59409,3.59409,0,0,0-1.33406-.20075,3.45812,3.45812,0,0,0-1.5141.3983,3.17906,3.17906,0,0,0-.60724.37708l-18.36413,14.33976-26.67024,20.83345-8.93478,6.97911.00182.00751-.00769.00186-32.7657,25.578-5.41664,4.23905-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357L690.656,378.79172,630.59485,367.362a3.59025,3.59025,0,0,0-1.54741.03342,3.66988,3.66988,0,0,0-1.78823,1.03592,4.11057,4.11057,0,0,0-.49291.65091A3.64176,3.64176,0,0,0,626.34909,371.81749Zm89.26313,12.78685,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm0,0,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm0,0,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Z" transform="translate(-311.75036 -203.25)" fill="#fff"/>
+                        <path d="M715.61222,384.60434l27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm81.83767-28.539.26672,1.10181,1.21521-.9448Zm-81.83767,28.539,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm0,0,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357ZM627.7849,369.161l.13589.102c.02275-.03727.06233-.07063.09239-.10968a2.64256,2.64256,0,0,1,2.38507-.76779l59.68567,11.354,25.5283,4.86479,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357L690.656,378.79172,630.59485,367.362a3.59025,3.59025,0,0,0-1.54741.03342Zm-1.43581,2.65652,30.916,127.71019a3.66655,3.66655,0,0,0,4.42206,2.69835l223.76079-54.16788a3.6663,3.6663,0,0,0,2.69835-4.42206l-30.916-127.71018a3.6384,3.6384,0,0,0-2.35767-2.59508,3.59409,3.59409,0,0,0-1.33406-.20075,3.45812,3.45812,0,0,0-1.5141.3983,3.17906,3.17906,0,0,0-.60724.37708l-18.36413,14.33976-26.67024,20.83345-8.93478,6.97911.00182.00751-.00769.00186-32.7657,25.578-5.41664,4.23905-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357L690.656,378.79172,630.59485,367.362a3.59025,3.59025,0,0,0-1.54741.03342,3.66988,3.66988,0,0,0-1.78823,1.03592,4.11057,4.11057,0,0,0-.49291.65091A3.64176,3.64176,0,0,0,626.34909,371.81749Zm1.0196-.24682a2.59762,2.59762,0,0,1,.46152-2.19054.34094.34094,0,0,1,.09058-.11714c.02275-.03727.06233-.07063.09239-.10968a2.64256,2.64256,0,0,1,2.38507-.76779l59.68567,11.354,25.5283,4.86479,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585,4.44395-3.47195,31.54686-24.64821,1.21521-.9448,7.44662-5.81748,26.5182-20.70938,19.17121-14.97157a2.60368,2.60368,0,0,1,.98714-.477,1.99722,1.99722,0,0,1,.30518-.05006,1.61549,1.61549,0,0,1,.27147-.026,2.67893,2.67893,0,0,1,.90068.14691,2.625,2.625,0,0,1,1.68605,1.85318l30.916,127.71019a2.61952,2.61952,0,0,1-1.93138,3.16522L661.4422,501.21416a2.61809,2.61809,0,0,1-3.1575-1.93331Zm88.24353,13.03367,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm0,0,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Zm0,0,27.398,5.21358,8.75042,1.66643a3.68877,3.68877,0,0,0,2.938-.71124l7.02714-5.48585-2.46594.59695-5.20559,4.061a2.63556,2.63556,0,0,1-2.09887.5081l-6.47926-1.23238-27.398-5.21357Z" transform="translate(-311.75036 -203.25)" fill="#3f3d56"/>
+                        <path d="M827.1291,422.96742a8.12818,8.12818,0,0,1,5.98077-9.80128l28.24156-6.8367a8.119,8.119,0,0,1,3.82051,15.78205l-28.24156,6.8367A8.12818,8.12818,0,0,1,827.1291,422.96742Z" transform="translate(-311.75036 -203.25)" fill="var(--color-accent)"/>
+                        <circle cx="203.27678" cy="189" r="7" fill="#fff"/>
+                    </svg>
+
+                    <p class="relative text-center font-medium text-normalxl mt-5"> Aucun message ici </p>
+                </div>
+
+                <!-- Mail loading start -->
+                <div v-if="store.mail.displayLoader" class="mt-9">
+                    <template v-for="index in 5">
+                        <div class="box-loading relative mt-5 p-5 pl-7 rounded-lg bg-800 flex flex-row cursor-pointer">
+                            <div class="relative rounded-full w-16 h-16 text-4xl font-medium bg-700">
+                                <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"> &nbsp; </p>
+                            </div>
+                
+                            <div class="flex-1 flex flex-col ml-4 text-ellipsis overflow-hidden whitespace-nowrap">
+                                <div class="flex-1 flex flex-row">
+                                    <p class="flex-1 font-medium text-sm text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700 mr-2"> &nbsp; </p>
+                                    <p class="ml-2 text-sm text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
+                                </div>
+                
+                                <p class="flex-1 text-sm mt-3 text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p> 
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- Mail loading end -->
+
+                <!-- New mail button start -->
+                <!-- <div class="fixed top-full -translate-y-full -mt-24 left-full -translate-x-full -ml-6 bg-accent rounded-full p-2">
+                    <svg class="h-12 w-12" xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                        <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 112v288M400 256H112"/>
+                    </svg>
+                </div> -->
+                <!-- New mail button end -->
+            </div>
+        </div>
+        <!-- Mail page end -->
+
+        <!-- Mail content page start -->
+        <div id="add-planning-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'mail-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+            <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
+                <div class="w-full flex flex-row">
+                    <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton()" @click="clicked">
+                        <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/>
+                    </svg>
+                    <p class="flex-1 ml-4 mt-1 text-3xl font-bold"> {{ store.mailContent.message.from }} </p>
+                </div>
+                <!-- Page header end -->
+
+                <!-- Mail header start -->
+                <div v-if="store.mailContent.message" class="relative p-5 bg-800 mt-5 rounded-lg">
+                    <p class="text-2xl font-medium"> {{ store.mailContent.message.title }} </p>
+
+                    <p class="text-normalxl mt-4"> De: {{ store.mailContent.message.from }} </p>
+                    <p class="text-normalxl mt-1"> A:
+                        <span v-for="(to, index) in store.mailContent.message.to">
+                            {{ to }}<span v-if="index != store.mailContent.message.to.length - 1">,
+                            </span>
+                        </span>    
+                    </p>
+
+                    <p class="text-normalxl -mt-1" v-if="store.mailContent.message.cc.length != 0"> Cc:
+                        <span v-for="(cc, index) in store.mailContent.message.cc">
+                            {{ cc }}<span v-if="index != store.mailContent.message.cc.length - 1">,
+                            </span>
+                        </span>
+                    </p>
+
+                    <p class="text-normalxl mt-5"> Le {{ store.mailContent.message.date.string.eventFullDateName }} {{ store.mailContent.message.date.date.year }} à {{ store.mailContent.message.date.time.hour }}h{{ store.mailContent.message.date.time.minute }} </p>
+                
+                    <div class="bg-700 rounded-lg p-3 flex flex-row mt-5 w-14">
+                        <svg class="text-center h-8" @click="store.mailContent.deleteMail()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                            <path stroke="var(--color-100)" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352"/>
+                            <path d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        </svg>
+                    </div>
+                </div>
+                <!-- Mail header end -->
+
+                <!-- See text version -->
+                <div class="rounded-lg p-4 bg-700 mt-3 flex flex-row items-center" @click="store.mailContent.showTextVersion = !store.mailContent.showTextVersion" v-if="store.mailContent.message.text && store.mailContent.message.html">
+                    <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M32 415.5l120-320 120 320M230 303.5H74M326 239.5c12.19-28.69 41-48 74-48h0c46 0 80 32 80 80v144"/>
+                        <path d="M320 358.5c0 36 26.86 58 60 58 54 0 100-27 100-106v-15c-20 0-58 1-92 5-32.77 3.86-68 19-68 58z" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                    </svg>
+
+                    <p v-if="!store.mailContent.showTextVersion" class="text-normalxl font-medium mr-5 ml-5 flex-1"> Voir la version texte </p>
+                    <p v-if="store.mailContent.showTextVersion" class="text-normalxl font-medium mr-5 ml-5 flex-1"> Voir l'original </p>
+                </div>
+
+                <!-- Mail attachements start -->
+                <div v-if="store.mailContent.message.attachments && store.mailContent.message.attachments.length > 0">
+                    <template v-for="attachment in store.mailContent.message.attachments">
+                        <div @click="store.mailContent.downloadAttachement(attachment)" class="rounded-lg p-5 bg-800 flex flex-row mt-3 items-center">
+                            <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path d="M208 64h66.75a32 32 0 0122.62 9.37l141.26 141.26a32 32 0 019.37 22.62V432a48 48 0 01-48 48H192a48 48 0 01-48-48V304" fill="none" stroke="var(--color-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                                <path d="M288 72v120a32 32 0 0032 32h120" fill="none" stroke="var(--color-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                                <path d="M160 80v152a23.69 23.69 0 01-24 24c-12 0-24-9.1-24-24V88c0-30.59 16.57-56 48-56s48 24.8 48 55.38v138.75c0 43-27.82 77.87-72 77.87s-72-34.86-72-77.87V144" fill="none" stroke="var(--color-accent)" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32"/>
+                            </svg>
+
+                            <div class="ml-5 mr-5 flex-1">
+                                <p class="text-normalxl font-medium"> {{ attachment.filename }} </p>
+                                <p class="text-normalxl"> {{ attachment.fileType }} </p>
+                            </div>
+
+                            <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                                <path d="M336 176h40a40 40 0 0140 40v208a40 40 0 01-40 40H136a40 40 0 01-40-40V216a40 40 0 0140-40h40" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                                <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M176 272l80 80 80-80M256 48v288"/>
+                            </svg>
+                        </div>
+                    </template>
+                </div>
+                <!-- Mail attachements end -->
+
+                <!-- Mail content start -->
+                <div class="mt-4 p-1 text-normalxl">
+                    <div v-if="!store.mailContent.message.html || store.mailContent.showTextVersion">
+                        <p> {{ store.mailContent.message.text }} </p>
+                    </div>
+
+                    <div v-if="store.mailContent.message.html && !store.mailContent.showTextVersion" v-html="store.mailContent.message.html"></div>
+                </div>
+                <!-- Mail content end -->
+            </div>
+        </div>
+        <!-- Mail content page end -->
+
         <!-- start notification page -->
         <div id="notification-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'notification-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
@@ -308,7 +715,7 @@
                     </svg>
                     <p class="flex-1 ml-4 mt-1 text-3xl font-bold"> Informations </p>
 
-                    <div class="ring-loader animate-spin" v-if="store.informations.displayLoader"><div></div></div>
+                    <div class="ring-loader" v-if="store.informations.displayLoader"><div class="animate-spin"></div></div>
                 </div>
                 <!-- Page header end -->
 
@@ -395,6 +802,19 @@
                     </div>
                     <!-- Goto personalization end -->
 
+                    <!-- Goto planning settings start -->
+                    <div class="relative mt-5 p-5 rounded-lg bg-800 flex flex-row cursor-pointer" v-scope="GotoButton({ pageName: 'planning-settings-page' })" @click="clicked">
+                        <svg class="w-10 h-10 m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <rect x="48" y="80" width="416" height="384" rx="48" fill="none" stroke="var(--color-100)" stroke-linejoin="round" stroke-width="32"/>
+                            <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M128 48v32M384 48v32M464 160H48M304 260l43.42-32H352v168M191.87 306.63c9.11 0 25.79-4.28 36.72-15.47a37.9 37.9 0 0011.13-27.26c0-26.12-22.59-39.9-47.89-39.9-21.4 0-33.52 11.61-37.85 18.93M149 374.16c4.88 8.27 19.71 25.84 43.88 25.84 28.59 0 52.12-15.94 52.12-43.82 0-12.62-3.66-24-11.58-32.07-12.36-12.64-31.25-17.48-41.55-17.48"/>
+                        </svg>
+                        <p class="ml-5 flex-1 text-2xl font-medium m-auto text-left"> Emploi du temps </p>
+                        <svg class="w-12 h-12 m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="none" stroke="var(--color-accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/>
+                        </svg>
+                    </div>
+                    <!-- Goto planning settings end -->
+
                     <!-- Blocks separator -->
                     <div class="h-5"></div>
 
@@ -448,6 +868,77 @@
         </div> 
         <!-- end settings page -->
 
+        <!-- start planning settings page -->
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'planning-settings-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+            <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
+                <div class="w-full flex flex-row">
+                    <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton()" @click="clicked">
+                        <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/>
+                    </svg>
+                    <p class="flex-1 ml-4 mt-1 text-3xl font-bold"> Emploi du temps </p>
+                </div>
+                <!-- Page header end -->
+
+                <!-- Planning style selection start -->
+                <div class="relative flex flex-col text-2xl mt-5 rounded-lg p-5 bg-800">
+                    <p> Style d'affichage </p>
+
+                    <!-- Selector toogle start -->
+                    <label class="relative flex flex-row p-5 text-2xl bg-800 mt-5 rounded-lg">
+                        <p  class="flex-1 m-auto"> Style 1 </p>
+
+                        <input @change="store.planningSettings.planningTemplateToggle($el)" v-bind:checked="store.planningSettings.planningTemplate == 2" type="checkbox" class="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none m-auto" />
+                        <span class="switch w-20 h-10 flex ml-4 p-2 bg-600 rounded-full duration-300 overflow-hidden m-auto after:w-6 after:h-6  after:rounded-full after:duration-300 peer-checked:after:translate-x-10"></span>
+                    
+                        <p  class="flex-1 m-auto text-right"> Style 2 </p>
+                    </label>
+                    <!-- Selector toogle end -->
+
+                    <div class="flex flex-row">
+                        <div class="cursor-pointer flex flex-1 flex-row">
+                            <div class="relative">
+                                <p class="text-2xl font-bold"> 08h15 </p>
+                                <p class="text-xl font-medium"> 10h15 </p>
+                            </div>
+                        
+                            <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-700">
+                                <div class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
+                        
+                                <p class="text-2xl font-medium"> Algèbre </p>
+                                <p class="text-normalxl"> Jordan Lefevre </p>
+                        
+                                <p class="text-normalxl mt-3"> 2h00 </p>
+                                <p class="text-normalxl"> F Amphi 22 </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row mt-7">
+                        <div class="cursor-pointer flex flex-1 flex-row">
+                            <div class="relative w-28">
+                                <p class="text-2xl font-bold"> 08h15 </p>
+                                <p class="text-xl font-medium color-200"> 10h15 </p>
+                        
+                                <div v-bind:style="{ '--el-color-accent': 'var(--color-accent)' }" class="planning-point absolute top-0 left-full -translate-x-full rounded-full bg-accent"></div>
+                                <div class="planning-bar absolute top-0 left-full -translate-x-full bg-accent"></div>
+                            </div>
+                        
+                            <div class="relative flex-1 ml-5 m-3 p-4 box-border element-box-shadow bg-accent rounded-lg">
+                                <p class="text-2xl font-medium"> Algèbre </p>
+                                <p class="text-normalxl"> Jordan Lefevre </p>
+                        
+                                <p class="text-normalxl mt-3"> 2h00 </p>
+                                <p class="text-normalxl"> F Amphi 22 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Planning style selection end -->
+            </div>
+        </div> 
+        <!-- end planning settings page -->
+
         <!-- start personalization page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'personalization-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
@@ -465,7 +956,7 @@
                     <p  class="flex-1 m-auto"> Mode sombre </p>
 
                     <input @change="store.themeColor.toggle($el)" v-bind:checked="store.themeColor.color == 'dark'" type="checkbox" class="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none m-auto" />
-                    <span class="w-16 h-10 flex ml-4 p-2 bg-600 rounded-full duration-300 overflow-hidden m-auto after:w-6 after:h-6 after:bg-100 after:rounded-full after:duration-300 peer-checked:after:translate-x-6"></span>
+                    <span class="checkbox w-16 h-10 flex ml-4 p-2 bg-600 rounded-full duration-300 overflow-hidden m-auto after:w-6 after:h-6 after:bg-100 after:rounded-full after:duration-300 peer-checked:after:translate-x-6"></span>
                 </label>
                 <!-- Dark mode toogle end -->
 
@@ -477,12 +968,29 @@
                         <div @click="store.accentColor.toggle(0)" v-bind:style="{ backgroundColor: store.accentColor.colors[0] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
                         <div @click="store.accentColor.toggle(1)" v-bind:style="{ backgroundColor: store.accentColor.colors[1] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
                         <div @click="store.accentColor.toggle(2)" v-bind:style="{ backgroundColor: store.accentColor.colors[2] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.accentColor.toggle(3)" v-bind:style="{ backgroundColor: store.accentColor.colors[3] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                    </div>
+
+                    <div class="flex flex-row mt-5 items-center justify-center">
+                        <div @click="store.accentColor.toggle(4)" v-bind:style="{ backgroundColor: store.accentColor.colors[4] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.accentColor.toggle(5)" v-bind:style="{ backgroundColor: store.accentColor.colors[5] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.accentColor.toggle(6)" v-bind:style="{ backgroundColor: store.accentColor.colors[6] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
+                        <div @click="store.accentColor.toggle(7)" v-bind:style="{ backgroundColor: store.accentColor.colors[7] }" class="ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer"></div>
                     </div>
                 </div>
                 <!-- Color selection section end -->
+
+                <!-- Low perf mode toogle start -->
+                <label class="relative flex flex-row p-5 text-2xl bg-800 mt-5 rounded-lg">
+                    <p  class="flex-1 m-auto"> Mode faible performance </p>
+
+                    <input @change="store.settings.toggleLowPerfMode($el)" v-bind:checked="store.settings.lowPerfMode" type="checkbox" class="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none m-auto" />
+                    <span class="checkbox w-16 h-10 flex ml-4 p-2 bg-600 rounded-full duration-300 overflow-hidden m-auto after:w-6 after:h-6 after:bg-100 after:rounded-full after:duration-300 peer-checked:after:translate-x-6"></span>
+                </label>
+                <!-- Low perf mode toogle end -->
             </div>
         </div> 
-        <!-- end mode sombre page -->
+        <!-- end personalization page -->
 
         <!-- start app share page -->
         <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'app-share-page', pageAnimation: 'slide'})" @vue:mounted="mounted" v-bind:id="pageName" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
@@ -601,7 +1109,7 @@
     </div>
     <!-- end of global warper -->
 
-    <!-- Bottom menu -->
+    <!-- Bottom menu start -->
     <div class="bottom-menu fixed top-full left-0 -translate-y-full w-full flex flex-row box-border">
         <div class="element flex-1 m-auto cursor-pointer" v-scope="BottomMenuButton({ pageName: 'home-page', dasharray: 1400, index: 0 })" @click="clicked" style="stroke: var(--color-accent);">
             <svg v-bind:style="{ strokeDasharray: currentDasharray, strokeDashoffset: currentDashoffset, transition: transitionSpeed, stroke: store.home.menuSelected[index] }" class="relative h-12 aspect-square m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -616,20 +1124,128 @@
                 <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M128 48v32M384 48v32M464 160H48M304 260l43.42-32H352v168M191.87 306.63c9.11 0 25.79-4.28 36.72-15.47a37.9 37.9 0 0011.13-27.26c0-26.12-22.59-39.9-47.89-39.9-21.4 0-33.52 11.61-37.85 18.93M149 374.16c4.88 8.27 19.71 25.84 43.88 25.84 28.59 0 52.12-15.94 52.12-43.82 0-12.62-3.66-24-11.58-32.07-12.36-12.64-31.25-17.48-41.55-17.48"/>
             </svg>
         </div>
-        
-        <div class="element flex-1 m-auto cursor-pointer">
-            <img class="relative h-12 aspect-square m-auto" src="assets/icons/mail.svg" />
+
+        <div class="element flex-1 m-auto cursor-pointer" v-scope="BottomMenuButton({ pageName: 'mail-page', dasharray: 1600, index: 2 })" @click="clicked" style="stroke: var(--color-100);">
+            <svg v-bind:style="{ strokeDasharray: currentDasharray, strokeDashoffset: currentDashoffset, transition: transitionSpeed, stroke: store.home.menuSelected[index] }" class="relative h-12 aspect-square m-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M441.6 171.61L266.87 85.37a24.57 24.57 0 00-21.74 0L70.4 171.61A40 40 0 0048 207.39V392c0 22.09 18.14 40 40.52 40h335c22.38 0 40.52-17.91 40.52-40V207.39a40 40 0 00-22.44-35.78z" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                <path d="M397.33 368L268.07 267.46a24 24 0 00-29.47 0L109.33 368M309.33 295l136-103M61.33 192l139 105" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+            </svg>
         </div>
 
         <div class="element flex-1 m-auto cursor-pointer">
             <img class="relative h-12 aspect-square m-auto" src="assets/icons/celene.svg" />
         </div>
 
-        <div class="element flex-1 m-auto cursor-pointer">
+        <!-- <div class="element flex-1 m-auto cursor-pointer">
             <img class="relative h-12 aspect-square m-auto" src="assets/icons/reminder.svg" />
-        </div>
+        </div> -->
     </div>
-    <!-- Bottom menu -->
+    <!-- Bottom menu end -->
+
+    <!-- Pop up start -->
+    <div v-scope="Popup()" v-bind:style="{ marginTop: marginTop, opacity: opacity, display: display }" v-effect="if(store.popup.text) { usePopup(store.popup.text, store.popup.callback); }" class="z-50 fixed top-full ml-5 mr-5 -translate-y-full bg-700 p-4 rounded-lg w-11/12 flex flex-row text-ellipsis overflow-hidden whitespace-nowrap items-center duration-300" v-cloak>
+        <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path d="M448 256c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z" fill="none" stroke="var(--color-100)" stroke-miterlimit="10" stroke-width="32"/>
+            <path d="M250.26 166.05L256 288l5.73-121.95a5.74 5.74 0 00-5.79-6h0a5.74 5.74 0 00-5.68 6z" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+            <path fill="var(--color-100)" d="M256 367.91a20 20 0 1120-20 20 20 0 01-20 20z"/>
+        </svg>
+
+        <p class="ml-3 flex-1 text-normalxl font-medium text-ellipsis overflow-hidden whitespace-nowrap"> {{ text }} </p>
+
+        <p class="color-accent text-normalxl font-medium ml-3" @click="clicked"> Annuler </p>
+    </div>
+    <!-- Pop up end -->
+
+    <!-- Class template start -->
+    <template id="class-template">
+        <div v-if="store.planningSettings.planningTemplate == 1">
+            <div class="mt-5 cursor-pointer flex flex-row" @click="store.eventContent.openPage(event)">
+                <div class="relative">
+                    <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
+                    <p class="text-2xl font-medium"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
+                </div>
+
+                <div class="relative ml-4 flex-1 p-5 pl-7 rounded-lg bg-800">
+                    <div v-bind:style="{ backgroundColor: (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)'), }" class="absolute w-2 h-full top-0 left-0 rounded-md"></div>
+
+                    <p class="text-3xl font-medium"> {{ event.summary }} </p>
+                    <p class="text-normalxl"> {{ event.teacher }} </p>
+
+                    <p class="text-normalxl mt-3"> {{ event.duration.text }} </p>
+                    <p class="text-normalxl"> {{ event.location }} </p>
+                </div>
+            </div>
+
+            <div v-if="store.planning.eventNotes[event.uid]" v-bind:style="{ backgroundColor: (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)'), }" class="mt-4 rounded-lg text-normalxl p-4">
+                <p> {{ store.planning.eventNotes[event.uid] }} </p>
+            </div>
+        </div>
+
+        <div v-if="store.planningSettings.planningTemplate == 2">
+            <div class="mt-5 cursor-pointer flex flex-row" @click="store.eventContent.openPage(event)">
+                <div class="relative w-28">
+                    <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
+                    <p class="text-2xl font-medium color-200"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
+            
+                    <div v-bind:style="{ backgroundColor: (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)'), '--el-color-accent': (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)') }" class="planning-point absolute top-0 left-full -translate-x-full rounded-full"></div>
+                    <div v-bind:style="{ backgroundColor: (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)'), }" class="planning-bar absolute top-0 left-full -translate-x-full"></div>
+                </div>
+            
+                <div v-bind:style="{ backgroundColor: (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)'), '--el-color-accent': (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)') }" class="relative flex-1 ml-5 m-3 p-4 box-border event-box-shadow rounded-lg">
+                    <p class="text-3xl font-medium"> {{ event.summary }} </p>
+                    <p class="text-normalxl"> {{ event.teacher }} </p>
+            
+                    <p class="text-normalxl mt-3"> {{ event.duration.text }} </p>
+                    <p class="text-normalxl"> {{ event.location }} </p>
+                </div>
+            </div>
+
+            <div v-bind:style="{ backgroundColor: (store.planning.eventColors[event.categoryId] ? store.planning.eventColors[event.categoryId] : 'var(--color-accent)'), }" v-if="store.planning.eventNotes[event.uid]" class="relative event-box-shadow mt-4 rounded-lg text-normalxl p-4 mr-3 ml-3">
+                <p> {{ store.planning.eventNotes[event.uid] }} </p>
+            </div>
+        </div>
+    </template>
+    <!-- Class template end -->
+
+    <!-- Message template start -->
+    <template id="message-template">
+        <div @vue:mounted="load">
+            <div @click="click" v-if="!loading" class="relative mt-5 p-5 pl-7 rounded-lg bg-800 flex flex-row cursor-pointer">
+                <div v-if="!seen && !error" class="bg-accent absolute w-2 h-full top-0 left-0 rounded-md"></div>
+    
+                <div v-if="!error" class="relative rounded-full w-16 h-16 text-4xl font-medium bg-700">
+                    <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"> {{ message.firstLetter }} </p>
+                </div>
+    
+                <div v-if="!error" class="flex-1 flex flex-col ml-4 text-ellipsis overflow-hidden whitespace-nowrap">
+                    <div class="flex-1 flex flex-row">
+                        <p class="flex-1 font-medium text-2xl text-ellipsis overflow-hidden whitespace-nowrap"> {{ message.from }} </p>
+                        <p class="ml-2 text-normalxl text-ellipsis overflow-hidden whitespace-nowrap"> {{ message.date.string.eventFullDateName }} </p>
+                    </div>
+    
+                    <p v-if="!error" class="flex-1 text-normalxl mt-1 text-ellipsis overflow-hidden whitespace-nowrap"> {{ message.title }} </p> 
+                </div>
+
+                <p v-if="error" class="flex-1 text-normalxl font-medium"> Une erreur s'est produite lors du chargement du mail ! </p>
+            </div>
+    
+            <div v-if="loading" class="box-loading relative mt-5 p-5 pl-7 rounded-lg bg-800 flex flex-row cursor-pointer">
+                <div class="relative rounded-full w-16 h-16 text-4xl font-medium bg-700">
+                    <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"> &nbsp; </p>
+                </div>
+    
+                <div class="flex-1 flex flex-col ml-4 text-ellipsis overflow-hidden whitespace-nowrap">
+                    <div class="flex-1 flex flex-row">
+                        <p class="flex-1 font-medium text-sm text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700 mr-2"> &nbsp; </p>
+                        <p class="ml-2 text-sm text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
+                    </div>
+    
+                    <p class="flex-1 text-sm mt-3 text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p> 
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- Message template end -->
     
     <script src="js/compiled/global.js" type="module" defer></script>
 </body>
