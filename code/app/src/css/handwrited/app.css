@@ -282,6 +282,10 @@ input[type="checkbox"] ~ .checkbox:after, .switch:after {
     line-height: 1.875rem;
 }
 
+.w-30 {
+    width: 7.5rem;
+}
+
 /* Used to disable animation if low perf mode is active */
 .duration-300 {
     transition-duration: var(--transition-duration);

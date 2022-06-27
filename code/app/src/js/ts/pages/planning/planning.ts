@@ -144,29 +144,43 @@ export default class PlanningBox {
                 let fullHour = date.getHours() * 100 + date.getMinutes() * 1;
 
                 for(let j = 0; j < this.planning.events[i].length; j++) {
-                    let fullHour2 = this.planning.events[i][j].eventStart.time.hour * 100 + this.planning.events[i][j].eventStart.time.minute * 1;
+                    let fullHour2 = this.planning.events[i][j].eventEnd.time.hour * 100 + this.planning.events[i][j].eventEnd.time.minute * 1;
 
                     this.planning.nextClass = this.planning.events[i][j];
                     if(fullHour <= fullHour2) {
-                        let date2 = {
-                            time: {
-                                minute: this.planning.events[i][j].eventStart.time.minute,
-                                hour: this.planning.events[i][j].eventStart.time.hour,
-                            },
-                        };
+                        let date2 = null;
+                        let fullHour3 = this.planning.events[i][j].eventStart.time.hour * 100 + this.planning.events[i][j].eventStart.time.minute * 1;
+                        if(fullHour >= fullHour3) {
+                            if(this.planning.events[i][j + 1]) {
+                                date2 = {
+                                    time: {
+                                        minute: this.planning.events[i][j + 1].eventStart.time.minute,
+                                        hour: this.planning.events[i][j + 1].eventStart.time.hour,
+                                    },
+                                }
+                            }
+                        } else {
+                            date2 = {
+                                time: {
+                                    minute: this.planning.events[i][j].eventStart.time.minute,
+                                    hour: this.planning.events[i][j].eventStart.time.hour,
+                                },
+                            }
+                        }
     
                         let date1 = {
                             time: {
                                 minute: date.getMinutes(),
-                                hour: 7,
+                                hour: date.getHours(),
                             },
                         }
                         
-                        let time = DateManager.calcDuration(date1, date2);
-                        this.planning.nextClassTime = time.text;
+                        if(date2) {
+                            let time = DateManager.calcDuration(date1, date2);
+                            this.planning.nextClassTime = time.text;
+                        }
     
                         dayFound = true;
-    
                         break;
                     }
                 }
@@ -216,7 +230,7 @@ export default class PlanningBox {
         this.planning.search.events = searchResult;
     }
 
-    async addPlanning(url) {
+    async addPlanning(url, page = "url") {
         let addPlanning = Store.getInstance().addPlanning;
         addPlanning.displayLoader = true;
 
@@ -242,11 +256,14 @@ export default class PlanningBox {
 
         addPlanning.errorMessage = "";
         addPlanning.displayLoader = false;
+        addPlanning.cameraError = "";
         this.planning.showAddPlanningButton = false;
         addPlanning.url = "";
 
         DataManager.getInstance().data.planning.urls.push(url);
-        PageNavigator.getInstance().back();
+
+        if(page == "qrcode") PageNavigator.getInstance().goto("planning-page");
+        else PageNavigator.getInstance().back();
 
         this.loadPlannings();
     }
@@ -264,5 +281,3 @@ export default class PlanningBox {
         return DataManager.getInstance().data.planning.eventNotes[event.uid];
     }
 }
-
-// http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=9101640d448493d466545be62dca3ab4f16bc99c1231ad75105654c3c757c8eb7620eb46444396bdf9e9eb1f96f57e6756c0259e9250fe3702f165b84e00ba5c,1

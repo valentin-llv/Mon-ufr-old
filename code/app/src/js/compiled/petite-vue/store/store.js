@@ -48,6 +48,26 @@ export default class Store {
                     let transitionDuration = this.lowPerfMode == true ? 0 : 300;
                     document.documentElement.style.setProperty('--transition-duration', transitionDuration + "ms");
                 },
+                feedbackFrom: "",
+                feedbackMessage: "",
+                feedbackFromBorderColor: "transparent",
+                feedbackMessageBorderColor: "transparent",
+                sendMail() {
+                    if (this.feedbackFrom && this.feedbackMessage) {
+                        FetchManager.getInstance().fetch("?from=" + this.feedbackFrom + "&message=" + this.feedbackMessage, "mailSenderUrl", {
+                            cache: false,
+                        });
+                        PageNavigator.getInstance().back();
+                        this.feedbackFrom = "";
+                        this.feedbackMessage = "";
+                        this.feedbackFromBorderColor = "transparent";
+                        this.feedbackMessageBorderColor = "transparent";
+                    }
+                    else {
+                        this.feedbackFromBorderColor = "rgba(255, 0, 0, 0.5)";
+                        this.feedbackMessageBorderColor = "rgba(255, 0, 0, 0.5)";
+                    }
+                },
             },
             accentColor: {
                 colors: ["#49b583", "#fd6868", "#5575e7", "#FFBD69", "#118AB2", "#4F5D75", "#631A86", "#EE6C4D"],
@@ -132,6 +152,67 @@ export default class Store {
                 url: "",
                 add() {
                     PlanningBox.getInstance().addPlanning(this.url);
+                },
+                cameraAutorized: false,
+                cameraVideoSource: null,
+                cameraError: "",
+                startScanning() {
+                    this.cameraError = "";
+                    if ("mediaDevices" in navigator && "ImageCapture" in window && "BarcodeDetector" in window) {
+                        navigator.mediaDevices.getUserMedia({
+                            audio: false,
+                            video: {
+                                facingMode: "environment",
+                            },
+                        }).then((stream) => {
+                            this.cameraAutorized = true;
+                            this.cameraVideoSource = stream;
+                        }).catch(() => {
+                            this.cameraError = "Vous devez accepter l'utilisation de la caméra pour lire le QR code.";
+                        });
+                    }
+                    else {
+                        this.cameraError = "Cette fonction n'est pas disponible sur votre appareil.";
+                    }
+                },
+                async scan() {
+                    let stream = this.cameraVideoSource;
+                    if (this.cameraAutorized) {
+                        let track = stream.getVideoTracks()[0];
+                        let imageCapture = new ImageCapture(track);
+                        let blobPhoto = await imageCapture.grabFrame();
+                        new BarcodeDetector({ formats: ['qr_code'] }).detect(blobPhoto).then((barcodes) => {
+                            if (barcodes.length > 1) {
+                                this.cameraError = "Trop d'éléments présent sur la photo.";
+                                return false;
+                            }
+                            if (barcodes.length == 0) {
+                                this.cameraError = "Aucun QR conde détécté";
+                                return false;
+                            }
+                            if (barcodes[0].rawValue.includes('http://')) {
+                                PlanningBox.getInstance().addPlanning(barcodes[0].rawValue, "qrcode");
+                                this.cameraError = this.errorMessage;
+                                setTimeout(() => {
+                                    this.closeScannPage();
+                                }, 300);
+                            }
+                            else {
+                                this.cameraError = "QR code invalide !";
+                                return false;
+                            }
+                        }).catch(err => {
+                            this.cameraError = "Une erreur s'est produite. Veuillez réessayer plus tard.";
+                        });
+                    }
+                },
+                closeScannPage() {
+                    setTimeout(() => {
+                        Store.getInstance().addPlanning.cameraVideoSource.getTracks().forEach((track) => {
+                            track.stop();
+                        });
+                        Store.getInstance().addPlanning.cameraAutorized = false;
+                    }, 300);
                 },
             },
             eventContent: {

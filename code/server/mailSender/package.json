@@ -1,0 +1,7 @@
+{
+  "main": "mailSender.js",
+  "type": "module",
+  "dependencies": {
+    "mailer": "^0.6.6"
+  }
+}

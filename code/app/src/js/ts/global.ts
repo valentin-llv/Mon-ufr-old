@@ -54,8 +54,19 @@ function main(): void {
     initPetiteVue();
 }
 
-window.onload = () => {
+window.onload = async () => {
     main();
+
+    // navigator.mediaDevices.getUserMedia({
+    //     audio: false,
+    //     video: {
+    //         facingMode: "environment",
+    //     },
+    // }).then((stream) => {
+    //     let video = document.getElementById('qr-reader') as any;  
+    //     video.srcObject = stream;
+    //     video.play();
+    // });
 }
 
 // http://ade.univ-tours.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?data=9101640d448493d466545be62dca3ab4f16bc99c1231ad75105654c3c757c8eb7620eb46444396bdf9e9eb1f96f57e6756c0259e9250fe3702f165b84e00ba5c,1

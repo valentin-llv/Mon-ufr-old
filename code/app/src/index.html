@@ -30,7 +30,7 @@
     <!-- start of global warper -->
     <div class="global-warper absolute w-full h-full overflow-hidden">
         <!-- start of home page -->
-        <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'home-page', pageAnimation: 'fade', hidden: false })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }">
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'home-page', pageAnimation: 'fade', hidden: false })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }">
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Header start -->
                 <p class="text-3xl font-medium"> Bonjour 👋 </p>
@@ -137,6 +137,23 @@
                             </div>
                         </template>
                     </div>
+
+                    <div v-if="store.mail.displayLoader">
+                        <div class="box-loading relative mt-5 p-5 pl-7 rounded-lg bg-800 flex flex-row cursor-pointer">
+                            <div class="relative rounded-full w-16 h-16 text-4xl font-medium bg-700 opacity-0">
+                                <p class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0"> &nbsp; </p>
+                            </div>
+                
+                            <div class="flex-1 flex flex-col ml-4 text-ellipsis overflow-hidden whitespace-nowrap">
+                                <div class="flex-1 flex flex-row">
+                                    <p class="flex-1 font-medium text-sm text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700 mr-2 opacity-0"> &nbsp; </p>
+                                    <p class="ml-2 text-sm text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700 opacity-0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
+                                </div>
+                
+                                <p class="flex-1 text-sm mt-3 text-ellipsis overflow-hidden whitespace-nowrap rounded-lg bg-700 opacity-0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p> 
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Mails section end -->
             </div>
@@ -144,7 +161,7 @@
         <!-- end of home page -->
 
         <!-- start of planning page -->
-        <div id="home-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'planning-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'planning-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <p class="text-3xl font-bold">
@@ -378,7 +395,7 @@
         <!-- end of planning page -->
 
         <!-- Add planning page start -->
-        <div id="add-planning-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'add-planning-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'add-planning-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <div class="w-full flex flex-row">
@@ -401,9 +418,27 @@
                 </p>
                 <!-- Explanation text end -->
 
+                <div v-scope="GotoButton({ pageName: 'add-planning-scann-page' })" @click="clicked" class="bg-700 rounded-lg flex flex-row p-4 mt-5 items-center">
+                    <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <rect fill="var(--color-100)" x="336" y="336" width="80" height="80" rx="8" ry="8"/>
+                        <rect fill="var(--color-100)"x="272" y="272" width="64" height="64" rx="8" ry="8"/>
+                        <rect fill="var(--color-100)"x="416" y="416" width="64" height="64" rx="8" ry="8"/>
+                        <rect fill="var(--color-100)"x="432" y="272" width="48" height="48" rx="8" ry="8"/>
+                        <rect fill="var(--color-100)"x="272" y="432" width="48" height="48" rx="8" ry="8"/>
+                        <rect fill="var(--color-100)"x="336" y="96" width="80" height="80" rx="8" ry="8"/>
+                        <rect x="288" y="48" width="176" height="176" rx="16" ry="16" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        <rect fill="var(--color-100)"x="96" y="96" width="80" height="80" rx="8" ry="8"/>
+                        <rect x="48" y="48" width="176" height="176" rx="16" ry="16" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                        <rect fill="var(--color-100)"x="96" y="336" width="80" height="80" rx="8" ry="8"/>
+                        <rect x="48" y="288" width="176" height="176" rx="16" ry="16" fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/>
+                    </svg>
+
+                    <p class="text-normalxl font-medium ml-3"> Scanner le code </p>
+                </div>
+
                 <div class="flex flex-row">
                     <p class="text-3xl font-medium mt-7 flex-1"> Entrez votre url </p>
-                    <div class="ring-loader small-loader" v-if="store.addPlanning.displayLoader == true"><div class="animate-spin"></div></div>
+                    <div class="ring-loader small-loader" v-if="store.addPlanning.displayLoader"><div class="animate-spin"></div></div>
                 </div>
 
                 <!-- Url form starts -->
@@ -421,8 +456,53 @@
         </div>
         <!-- Add planning page end -->
 
+        <!-- Add planning scann qr code start -->
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'add-planning-scann-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+            <div class="box relative w-full overflow-auto p-5 bg-900">
+                <!-- Page header start -->
+                <div class="w-full flex flex-row">
+                    <svg class="w-12 h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" v-scope="BackButton({ callback: store.addPlanning.closeScannPage })" @click="clicked">
+                        <path fill="none" stroke="var(--color-100)" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/>
+                    </svg>
+                    <p class="flex-1 ml-4 mt-1 text-3xl font-bold"> Scanner un QR code </p>
+
+                    <div class="ring-loader small-loader" v-if="store.addPlanning.displayLoader"><div class="animate-spin"></div></div>
+                </div>
+                <!-- Page header end -->
+
+                <!-- Explanation text -->
+                <p v-if="!store.addPlanning.cameraAutorized" class="text-normalxl mt-5">
+                    Pour scanner le QR code vous devez autoriser l'accés à la caméra de votre appareil. <br />
+
+                    <span class="color-accent"> Note:</span> cette autorisation de sera valable qu'une seule fois,et une bulle de notification
+                    apparait toujours lors de l'utilisation de la caméra.
+                </p>
+
+                <!-- Allow camera acces button -->
+                <div @click="store.addPlanning.startScanning" v-if="!store.addPlanning.cameraAutorized" class="rounded-lg p-5 bg-accent mt-4">
+                    <p class="text-normalxl text-center"> Autoriser l'accées à la caméra </p>
+                </div>
+
+                <!-- Error message -->
+                <p class="text-red-500 text-normalxl mt-5 text-center font-medium" v-if="!store.addPlanning.displayLoader"> {{ store.addPlanning.cameraError }} </p>
+                
+                <!-- Explanation text -->
+                <p v-if="store.addPlanning.cameraAutorized" class="text-normalxl mt-5"> 
+                    Faites apparaitre le QR code au centre du cadre.
+                </p>
+
+                <!-- Video feedback -->
+                <video v-if="store.addPlanning.cameraAutorized" v-effect="if(store.addPlanning.cameraVideoSource) { $el.srcObject= store.addPlanning.cameraVideoSource; $el.play(); }" id="qr-reader" class="bg-800 rounded-lg w-full mt-5"></video>
+            
+                <div @click="store.addPlanning.scan" v-if="store.addPlanning.cameraAutorized && !store.addPlanning.displayLoader" class="rounded-lg p-5 bg-accent mt-4">
+                    <p class="text-normalxl text-center"> Scanner </p>
+                </div>
+            </div>
+        </div>
+        <!-- Add planning scan qr code end -->
+
         <!-- Event content page start -->
-        <div id="add-planning-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'event-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'event-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <div class="w-full flex flex-row">
@@ -516,7 +596,7 @@
         <!-- Event content page end -->
 
         <!-- Mail page start -->
-        <div id="mail-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'mail-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ hidden: true, pageName: 'mail-page', pageAnimation: 'fade' })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <p class="text-3xl mt-1 font-bold">
@@ -615,7 +695,7 @@
         <!-- Mail page end -->
 
         <!-- Mail content page start -->
-        <div id="add-planning-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'mail-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'mail-content-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <div class="w-full flex flex-row">
@@ -706,7 +786,7 @@
         <!-- Mail content page end -->
 
         <!-- start notification page -->
-        <div id="notification-page" class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'notification-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
+        <div class="page absolute h-full w-full left-0 top-0 overflow-hidden duration-300" v-scope="Page({ pageName: 'notification-page', pageAnimation: 'slide', hidden: true })" @vue:mounted="mounted" v-bind:style="{ display: displayState, opacity: opacity, left: left }" v-cloak>
             <div class="box relative w-full overflow-auto p-5 bg-900">
                 <!-- Page header start -->
                 <div class="w-full flex flex-row">
@@ -1046,10 +1126,14 @@
                 <!-- Form start -->
                 <div class="relative flex flex-col p-5 bg-800 mt-5 rounded-lg">
                     <p class="text-normalxl"> Votre nom </p>
-                    <input class="color-100 rounded-lg mt-2.5 p-3 bg-700 text-normalxl" type="text" placeholder="George ..." />
+                    <input v-bind:style="{ borderColor: store.settings.feedbackFromBorderColor }" v-bind:value="store.settings.feedbackFrom" @input="store.settings.feedbackFrom = $el.value" class="color-100 border-2 rounded-lg mt-2.5 p-3 bg-700 text-normalxl" type="text" placeholder="George ..." />
 
                     <p class="text-normalxl mt-5"> Votre message </p>
-                    <textarea class="color-100 rounded-lg mt-2.5 p-3 bg-700 text-normalxl resize-none h-40" type="text" placeholder="Message ..."></textarea>
+                    <textarea v-bind:style="{ borderColor: store.settings.feedbackMessageBorderColor }" v-bind:value="store.settings.feedbackMessage" @input="store.settings.feedbackMessage = $el.value" class="color-100 border-2 rounded-lg mt-2.5 p-3 bg-700 text-normalxl resize-none h-40" type="text" placeholder="Message ..."></textarea>
+
+                    <div class="bg-accent p-4 rounded-lg mt-4" @click="store.settings.sendMail()">
+                        <p class="text-normalxl font-medium text-center"> Envoyer </p>
+                    </div>
                 </div>
                 <!-- Form end -->
             </div>
@@ -1160,7 +1244,7 @@
     <template id="class-template">
         <div v-if="store.planningSettings.planningTemplate == 1">
             <div class="mt-5 cursor-pointer flex flex-row" @click="store.eventContent.openPage(event)">
-                <div class="relative">
+                <div class="relative w-24">
                     <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
                     <p class="text-2xl font-medium"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
                 </div>
@@ -1183,7 +1267,7 @@
 
         <div v-if="store.planningSettings.planningTemplate == 2">
             <div class="mt-5 cursor-pointer flex flex-row" @click="store.eventContent.openPage(event)">
-                <div class="relative w-28">
+                <div class="relative w-30">
                     <p class="text-3xl font-bold"> {{ event.eventStart.time.hour }}h{{ event.eventStart.time.minute }} </p>
                     <p class="text-2xl font-medium color-200"> {{ event.eventEnd.time.hour }}h{{ event.eventEnd.time.minute }} </p>
             

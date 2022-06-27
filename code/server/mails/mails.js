@@ -3,9 +3,16 @@
 import http from "http";
 import https from "https";
 
+import fs from 'fs';
+
 import imaps from 'imap-simple';
 
-http.createServer(async (request, response) => {
+http.createServer(
+    // {
+    //     key: fs.readFileSync('/etc/letsencrypt/live/test.valentin-lelievre.com/privkey.pem'),
+    //     cert: fs.readFileSync('/etc/letsencrypt/live/test.valentin-lelievre.com/fullchain.pem'),
+    // }, 
+    async (request, response) => {
     if(request.method != "GET") {
         response.end(`${request.method} from origin ${request.headers.origin} is not allowed for the request.`);
     }

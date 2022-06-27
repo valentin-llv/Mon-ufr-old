@@ -33,6 +33,6 @@ function main() {
     MailBox.getInstance();
     initPetiteVue();
 }
-window.onload = () => {
+window.onload = async () => {
     main();
 };

@@ -1,4 +1,5 @@
 "use strict";
+import Store from "../../petite-vue/store/store.js";
 export default class PageNavigator {
     static _instance = null;
     pages = {};
@@ -66,6 +67,9 @@ export default class PageNavigator {
     handlePopEvent = () => {
         if (this.pageHistory.length > 1) {
             this.dispatchAnimation(this.pages[this.pageHistory[this.pageHistory.length - 1]], this.pages[this.pageHistory[this.pageHistory.length - 2]], this.pages[this.pageHistory[this.pageHistory.length - 1]].pageAnimation, "Close");
+            if (this.pageHistory[this.pageHistory.length - 1] == "add-planning-scann-page") {
+                Store.getInstance().addPlanning.closeScannPage();
+            }
             this.pageHistory.pop();
         }
     };
