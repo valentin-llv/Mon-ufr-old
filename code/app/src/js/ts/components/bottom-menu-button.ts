@@ -2,7 +2,7 @@
 
 /* Importing code */
 
-import PageNavigator from '../singleton/pageNavigator.js';
+import PageNavigator from '../singleton/page-navigator.js';
 import Store from '../singleton/store.js';
 
 /* Bottom menu component */

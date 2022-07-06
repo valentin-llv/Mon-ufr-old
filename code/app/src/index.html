@@ -854,7 +854,7 @@
         <!-- Settings page end -->
 
         <!-- Planning settings page start -->
-        <div v-scope="Page({ hidden: true, pageName: 'planning-settings-page', pageAnimation: 'slide'})" @vue:mounted="mounted" :style="{ display: displayState, opacity: opacity, left: left }" v-cloak page>
+        <div v-scope="PlanningSettingsPage()" @vue:mounted="mounted" :style="{ display: displayState, opacity: opacity, left: left }" v-cloak page>
             <div container>
                 <!-- Page header start -->
                 <div v-scope="PageHeader({pageTitle: 'Emploi du temps'})"></div>
@@ -914,12 +914,26 @@
                     </div>
                 </div>
                 <!-- Planning style selection end -->
+
+                <!-- Delete planning data start -->
+                <div class="relative flex flex-col text-2xl mt-5 rounded-lg p-5 bg-800">
+                    <p> Gestion des données </p>
+
+                    <div class="bg-red-500 p-4 rounded-lg mt-4" v-if="!displayDeleteData" @click="displayDeleteData = true">
+                        <p class="text-normalxl font-medium text-center"> Supprimer </p>
+                    </div>
+
+                    <div class="border-2 border-red-500 bg-800 p-4 rounded-lg mt-4" v-if="displayDeleteData" @click="deleteData()">
+                        <p class="text-normalxl font-medium text-center"> Confirmer </p>
+                    </div>
+                </div>
+                <!-- Delete planning data end -->
             </div>
         </div> 
-        <!-- end planning settings page -->
+        <!-- Planning settings page end -->
 
-        <!-- start planning settings page -->
-        <div v-scope="Page({ hidden: true, pageName: 'mails-settings-page', pageAnimation: 'slide'})" @vue:mounted="mounted" :style="{ display: displayState, opacity: opacity, left: left }" v-cloak page>
+        <!-- Mail settings page start -->
+        <div v-scope="MailsSettingsPage()" @vue:mounted="mounted" :style="{ display: displayState, opacity: opacity, left: left }" v-cloak page>
             <div container>
                 <!-- Page header start -->
                 <div v-scope="PageHeader({pageTitle: 'Compte de messagerie'})"></div>
@@ -928,14 +942,18 @@
                 <div class="rounded-lg p-5 bg-800 mt-5">
                     <p class="text-2xl font-medium"> Gestion du compte </p>
 
-                    <div @click="store.mail.deleteAccount()" class="bg-red-500 p-5 mt-5 rounded-lg">
-                        <p class="text-normalxl font-medium text-center"> Supprimer le compte </p>
+                    <div class="bg-red-500 p-4 rounded-lg mt-4" v-if="!displayDeleteData" @click="displayDeleteData = true">
+                        <p class="text-normalxl font-medium text-center"> Supprimer </p>
+                    </div>
+
+                    <div class="border-2 border-red-500 bg-800 p-4 rounded-lg mt-4" v-if="displayDeleteData" @click="deleteData()">
+                        <p class="text-normalxl font-medium text-center"> Confirmer </p>
                     </div>
                 </div>
                 <!-- Delete account end -->
             </div>
         </div> 
-        <!-- end mails settings page -->
+        <!-- Mails settings page end -->
 
         <!-- torage management page start -->
         <div v-scope="StorageManager()" @vue:mounted="mounted" :style="{ display: displayState, opacity: opacity, left: left }" v-cloak page>
@@ -977,6 +995,8 @@
                     <div class="border-2 border-red-500 bg-800 p-4 rounded-lg mt-4" v-if="displayDeleteCacheConfirm" @click="deleteCache()">
                         <p class="text-normalxl font-medium text-center"> Confirmer </p>
                     </div>
+
+                    <p class="text-red-500 text-center mt-5 font-medium text-normalxl mb-2" v-if="cacheErrorMessage"> {{ cacheErrorMessage }} </p>
                 </div>
             </div>
         </div> 
@@ -1038,6 +1058,8 @@
                         Ou avec le QR-code ci-dessous.
                     </p>
 
+                    <p class="text-red-500 text-center mt-5 font-medium text-normalxl mb-2" v-if="errorMessage"> {{ errorMessage }} </p>
+
                     <img class="mt-5 rounded-lg bg-white" src="assets/images/qrcode.png" alt="App share QR-code" />
                 </div>
                 <!-- Explanation end -->
@@ -1094,7 +1116,9 @@
                         <br /><br />
                         L'application est un projet personnel réalisé pendant du temps libre.
                         <br /><br />
-                        Pour en savoir plus c'est <a target="_blank" href="https://valentin-lelievre.com">ici</a> et me contacter <a target="_blank" href="mailto:lelievre.valentin17@gmail.com">par là</a>.
+                        Mon portfolio est disponible à cette adresse: <a target="_blank" href="https://valentin-lelievre.com">https://valentin-lelievre.com</a>.
+                        <br /><br />
+                        Vous pouvez aussi me contacter: <a target="_blank" href="mailto:lelievre.valentin17@gmail.com">lelievre.valentin17@gmail.com</a>
                     </p>
                 </div>
                 <!-- About dev section end -->

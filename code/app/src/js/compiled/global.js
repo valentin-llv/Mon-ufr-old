@@ -1,9 +1,9 @@
 "use strict";
 import Page from './new-pages/page.js';
 import Store from './singleton/store.js';
-import BackButton from './components/backButton.js';
-import GotoButton from './components/gotoButton.js';
-import BottomMenuButton from './components/bottomMenuButton.js';
+import BackButton from './components/back-button.js';
+import GotoButton from './components/goto-button.js';
+import BottomMenuButton from './components/bottom-menu-button.js';
 import PlanningBox from './singleton/planning.js';
 import { createApp } from '../../libs/petite-vue/petite-vue.js';
 import ClassEvent from './components/event.js';
@@ -23,12 +23,12 @@ import ShareAppPage from './new-pages/share-app.js';
 import PersonalizationPage from './new-pages/personalization.js';
 import StorageManager from './new-pages/storage-manager.js';
 import AddPlanningPage from './new-pages/add-planning.js';
+import PageNavigator from './singleton/page-navigator.js';
+import PlanningSettingsPage from './new-pages/planning-settings.js';
+import MailsSettingsPage from './new-pages/mails-settings.js';
 function initPetiteVue() {
     createApp({
         store: Store.getInstance(),
-        MailMessage,
-        CacheCounter,
-        Popup,
         HomePage,
         NotificationPage,
         FeedbackPage,
@@ -46,13 +46,22 @@ function initPetiteVue() {
         NotificationLoader,
         ClassEvent,
         ClassEventLoader,
+        PlanningSettingsPage,
+        MailMessage,
+        MailsSettingsPage,
+        Popup,
+        CacheCounter,
     }).mount();
 }
 function main() {
     PlanningBox.getInstance();
     MailBox.getInstance();
     initPetiteVue();
+    window.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        PageNavigator.getInstance().back();
+    });
 }
-window.onload = async () => {
+window.onload = () => {
     main();
 };

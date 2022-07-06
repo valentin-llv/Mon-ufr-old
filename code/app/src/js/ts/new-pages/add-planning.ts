@@ -3,7 +3,7 @@
 // Imports
 
 import Page from "./page.js";
-import PageNavigator from "../singleton/pageNavigator.js";
+import PageNavigator from "../singleton/page-navigator.js";
 import PlanningDownloader from "../singleton/planning-downloader.js";
 import DataManager from "../singleton/data-manager.js";
 import PlanningBox from "../singleton/planning.js";

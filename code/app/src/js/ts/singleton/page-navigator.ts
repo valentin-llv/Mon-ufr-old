@@ -75,7 +75,7 @@ export default class PageNavigator {
             this.dispatchAnimation(this.pages[this.pageHistory[this.pageHistory.length - 1]], this.pages[this.pageHistory[this.pageHistory.length - 2]], this.pages[this.pageHistory[this.pageHistory.length - 1]].pageAnimation, "Close");
             
             if(this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]) {
-                this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]();
+                setTimeout(this.closeCallback[this.pageHistory[this.pageHistory.length - 1]], 300);
             }
             this.pageHistory.pop();
         }

@@ -2,7 +2,7 @@
 
 // Imports
 
-import GotoButton from "./gotoButton.js";
+import GotoButton from "./goto-button.js";
 
 // Component
 

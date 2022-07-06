@@ -3,7 +3,7 @@
 // Imports
 
 import Store from "../singleton/store.js";
-import PageNavigator from "../singleton/pageNavigator.js";
+import PageNavigator from "../singleton/page-navigator.js";
 import DataManager from "../singleton/data-manager.js";
 
 // Component

@@ -4,7 +4,7 @@
 
 import Page from "./page.js";
 import FetchManager from "../singleton/fetch-manager.js";
-import PageNavigator from "../singleton/pageNavigator.js";
+import PageNavigator from "../singleton/page-navigator.js";
 import Store from "../singleton/store.js";
 
 // Page data

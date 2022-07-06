@@ -18,6 +18,8 @@ export default function ShareAppPage(props) {
 
     // Mix the current component data and the data from the extended component
     return {...{
+        errorMessage: "",
+
         openShareMenu() {
             if(navigator.share) {
                 navigator.share({
@@ -25,7 +27,7 @@ export default function ShareAppPage(props) {
                     text: 'Mon UFR la meilleur application pour  acceder à tous les services des UFR.',
                     url: 'https://ufr-planning.com/',
                 });
-            }
+            } else this.errorMessage = "Impossible sur votre appareil";
         },
     }, ...extension};
 }

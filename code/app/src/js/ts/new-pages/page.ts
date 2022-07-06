@@ -2,7 +2,7 @@
 
 // Imports
 
-import PageNavigator from '../singleton/pageNavigator.js';
+import PageNavigator from '../singleton/page-navigator.js';
 
 // Interfaces
 

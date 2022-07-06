@@ -5,7 +5,7 @@
 import { reactive } from '../../../libs/petite-vue/petite-vue.js';
 import DataManager from './data-manager.js';
 import FetchManager from './fetch-manager.js';
-import PageNavigator from './pageNavigator.js';
+import PageNavigator from './page-navigator.js';
 import MailBox from './mails.js';
 import PlanningBox from './planning.js';
 import DateManager from './date-manager.js';
@@ -44,7 +44,7 @@ export default class Store {
             },
 
             accentColor: {
-                colors: ["#49b583", "#fd6868", "#5575e7", "#FFBD69", "#118AB2", "#4F5D75", "#631A86", "#EE6C4D", "red"],
+                colors: ["#49b583", "#fd6868", "#5575e7", "#FFBD69", "#118AB2", "#4F5D75", "#631A86", "#EE6C4D"],
             },
 
             popup: {
@@ -61,11 +61,6 @@ export default class Store {
 
             planningSettings: {
                 planningTemplate: DataManager.getInstance().data.settings.planning.planningTemplate,
-
-                planningTemplateToggle(element) {
-                    this.planningTemplate = element.checked == true ? 2 : 1;
-                    DataManager.getInstance().data.settings.planning.planningTemplate = this.planningTemplate;
-                },
             },
 
             planning: {
@@ -297,33 +292,6 @@ export default class Store {
                     this.refreshDashoffset = 900;
                     await MailBox.getInstance().loadMails();
                     this.refreshDashoffset = 0;
-                },
-
-                deleteAccount() {
-                    let userId = DataManager.getInstance().data.mail.userId;
-                    let password = DataManager.getInstance().data.mail.password;
-                    let hierarchy = DataManager.getInstance().data.mail.hierarchy;
-
-                    DataManager.getInstance().data.mail.userId = "";
-                    DataManager.getInstance().data.mail.password = "";
-                    DataManager.getInstance().data.mail.hierarchy = {
-                        "Réception": [],
-                    };
-
-                    this.tabsDisplay = 0;
-                    this.tabNames = Object.keys(DataManager.getInstance().data.mail.hierarchy);
-                    this.hierarchy = DataManager.getInstance().data.mail.hierarchy;
-
-                    MailBox.getInstance().loadMails();
-                    PageNavigator.getInstance().back();
-
-                    Store.getInstance().popup.usePopup("Compte supprimé", () => {
-                        DataManager.getInstance().data.mail.userId = userId;
-                        DataManager.getInstance().data.mail.password = password;
-                        DataManager.getInstance().data.mail.hierarchy = hierarchy;
-
-                        MailBox.getInstance().loadMails();
-                    });
                 },
             },
 

@@ -4,7 +4,7 @@ import CacheManager from "../singleton/cache-manager.js";
 import DataManager from "../singleton/data-manager.js";
 import FetchManager from "../singleton/fetch-manager.js";
 import Server from "../singleton/server-manager.js";
-import PageNavigator from "../singleton/pageNavigator.js";
+import PageNavigator from "../singleton/page-navigator.js";
 import Store from "../singleton/store.js";
 import DateManager from "../singleton/date-manager.js";
 
