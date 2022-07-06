@@ -1,24 +1,44 @@
-"use strict";
-import PageNavigator from '../pageNavigator/pageNavigator.js';
-export default function Page(props) {
+"use strict"
+
+// Imports
+
+import PageNavigator from '../singleton/pageNavigator.js';
+
+// Interfaces
+
+interface PageProps {
+    pageName: string,
+    pageAnimation: string,
+    hidden?: boolean,
+}
+
+// Component
+
+export default function Page(props: PageProps): any {
     return {
         pageName: props.pageName,
         pageAnimation: props.pageAnimation,
+
         displayState: props.hidden === false ? "block" : "none",
         opacity: 1,
         left: 0,
+
         mounted() {
             PageNavigator.getInstance().registerPage(this);
-            if (this.mountedCallback) {
+
+            if(this.mountedCallback) {
                 this[this.mountedCallback]();
             }
         },
-        in(animationFunction) {
+
+        in(animationFunction: string) {
             this[animationFunction]();
         },
-        out(animationFunction) {
+
+        out(animationFunction: string) {
             this[animationFunction]();
         },
+        
         async fadeInOpen() {
             this.displayState = "block";
             this.opacity = 0;
@@ -27,6 +47,7 @@ export default function Page(props) {
             this.opacity = 1;
         },
         fadeInClose() { this.fadeInOpen(); },
+
         async fadeOutOpen() {
             await this.tick();
             this.opacity = 0;
@@ -35,6 +56,7 @@ export default function Page(props) {
             this.displayState = "none";
         },
         fadeOutClose() { this.fadeOutOpen(); },
+
         async slideInOpen() {
             this.displayState = "block";
             this.left = "100%";
@@ -42,6 +64,7 @@ export default function Page(props) {
             await this.tick();
             this.left = 0;
         },
+
         async slideInClose() {
             this.displayState = "block";
             this.left = "-200px";
@@ -49,6 +72,7 @@ export default function Page(props) {
             await this.tick();
             this.left = 0;
         },
+
         async slideOutOpen() {
             this.opacity = 1;
             await this.tick();
@@ -56,6 +80,7 @@ export default function Page(props) {
             await this.wait();
             this.displayState = "none";
         },
+
         async slideOutClose() {
             this.opacity = 1;
             await this.tick();
@@ -63,16 +88,18 @@ export default function Page(props) {
             await this.wait();
             this.displayState = "none";
         },
+
         async tick() {
-            return await new Promise((resolve) => {
-                setTimeout(() => {
+            return await new Promise((resolve): void => {
+                setTimeout((): void => {
                     resolve(true);
                 }, 20);
             });
         },
+
         async wait() {
-            return await new Promise((resolve) => {
-                setTimeout(() => {
+            return await new Promise((resolve): void => {
+                setTimeout((): void => {
                     resolve(true);
                 }, 300);
             });

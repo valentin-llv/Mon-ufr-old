@@ -1,25 +1,33 @@
-"use strict";
+"use strict"
+
+/* Cache manager */
+
 export default class CacheManager {
-    static _instance = null;
-    cacheStorageName = "data-cache";
-    timeoutTime = 1000 * 60 * 60 * 2;
-    static getInstance() {
-        if (!CacheManager._instance)
-            CacheManager._instance = new CacheManager();
+    private static _instance: CacheManager = null;
+
+    private cacheStorageName = "data-cache";
+    private timeoutTime = 1000 * 60 * 60 * 2 // 2 hour
+
+    public static getInstance(): CacheManager {
+        if(!CacheManager._instance) CacheManager._instance = new CacheManager();
         return CacheManager._instance;
     }
-    constructor() { }
-    async checkCache(url, timeoutCheck = false) {
-        if ('serviceWorker' in navigator) {
+
+    constructor() {}
+
+    public async checkCache(url: string, timeoutCheck: boolean = false): Promise<any> {
+        if('serviceWorker' in navigator) {
             return caches.open(this.cacheStorageName).then((cache) => {
                 return cache.match(url).then(async (data) => {
-                    if (!data) {
+                    if(!data) {
                         return false;
                     }
+
                     let jsonData = await data.json();
-                    if (timeoutCheck && jsonData.date + this.timeoutTime < Date.now()) {
+                    if(timeoutCheck && jsonData.date + this.timeoutTime < Date.now()) {
                         return false;
                     }
+
                     return jsonData.data;
                 }).catch(() => {
                     return false;
@@ -27,12 +35,12 @@ export default class CacheManager {
             }).catch(() => {
                 return false;
             });
-        }
-        else
-            return false;
+        } else return false;
     }
-    async cacheData(url, data) {
+
+    public async cacheData(url: string, data: Object): Promise<boolean> {
         let fakeResponse = this.createFakeResponse(url, data);
+
         return await new Promise((resolve) => {
             caches.open(this.cacheStorageName).then((cache) => {
                 return cache.put(url, fakeResponse);
@@ -43,14 +51,17 @@ export default class CacheManager {
             });
         });
     }
-    createFakeResponse(url, data) {
+
+    private createFakeResponse(url: string, data: Object): Response {
         let warpedData = {
             date: Date.now(),
             data: data,
         };
+
         let jsonData = JSON.stringify(warpedData);
-        let blob = new Blob([jsonData], { type: "application/json" });
-        let responseStatus = { "status": 200, "statusText": url };
+        let blob = new Blob([jsonData], {type: "application/json"});
+
+        let responseStatus = {"status": 200 , "statusText": url};
         return new Response(blob, responseStatus);
     }
 }

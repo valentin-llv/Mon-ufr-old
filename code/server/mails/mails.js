@@ -15,11 +15,13 @@ http.createServer(
     async (request, response) => {
     if(request.method != "GET") {
         response.end(`${request.method} from origin ${request.headers.origin} is not allowed for the request.`);
+        return false;
     }
 
     let urlParams = parseUrl(request.url);
     if(!urlParams.query) {
         response.end(`Request query is not defined !`);
+        return false;
     }
 
     if(urlParams.query == "getHierarchy") {
@@ -30,6 +32,16 @@ http.createServer(
             "Access-Control-Allow-Methods": "GET",
         });
         response.end(JSON.stringify(hierarchy));
+    }
+
+    if(urlParams.query == "login") {
+        let result = await MailManager.getInstance().login(urlParams);
+
+        response.writeHead(200, {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+        });
+        response.end(JSON.stringify({ succes: result }));
     }
 
     if(urlParams.query == "getMail") {
@@ -90,13 +102,24 @@ class MailManager {
         }
     }
 
+    async login(request) {
+        let config = this.getMailsConfig(decodeURI(request.mail), decodeURI(request.pass));
+
+        let connection = await this.connect(config);
+        if(!connection) return false;
+
+        connection.end();
+
+        return true;
+    }
+
     async getHierarchy(request) {
         let config = this.getMailsConfig(decodeURI(request.mail), decodeURI(request.pass));
 
         let connection = await this.connect(config);
         if(!connection) return { hierarchy: false, error: "con-error" }
 
-        let boxes = await this.getBoxes(connection);
+        let boxes = await this.getBoxes(connection).catch(() => { return false; });
         if(!boxes) return { hierarchy: false, error: "search-box-error" }
 
         let mailsId = await this.getMailsId(connection, boxes);
@@ -112,13 +135,13 @@ class MailManager {
     }
 
     async openBox(connection, boxName) {
-        try { await connection.openBox(boxName); return true;
+        try { await connection.openBox(boxName).catch(() => { return false; }); return true;
         } catch(e) { return false; }
     }
 
     async getBoxes(connection) {
         let boxes;
-        try { boxes = await connection.getBoxes();
+        try { boxes = await connection.getBoxes().catch(() => { return false; });
         } catch(e) { return false; }
         
         let searchedBoxes = [];
@@ -167,9 +190,7 @@ class MailManager {
     async loadMailsHeader(connection) {
         let mails = await connection.search(['ALL'], {
             bodies: ['HEADER.FIELDS (UID, FLAGS)'],
-        }).catch(() => {
-            return false;
-        });
+        }).catch(() => { return false; });
 
         let mailsId = [];
         for(let i = 0; i < mails.length; i++) {
@@ -230,7 +251,7 @@ class MailManager {
 
         for(let j = 0; j < parts.length; j++) {
             if(parts[j].disposition && parts[j].disposition.type.toUpperCase() == 'ATTACHMENT') {
-                let partData = await connection.getPartData(message[0], parts[j]).catch(() => { return null; });
+                let partData = await connection.getPartData(message[0], parts[j]).catch(() => { return false; });
 
                 if(partData) {
                     parsedMessage.attachements.push({
@@ -240,10 +261,10 @@ class MailManager {
                     });
                 }
             } else if(parts[j].subtype.toUpperCase() == 'HTML') {
-                let partData = await connection.getPartData(message[0], parts[j]).catch(() => { return null; });
+                let partData = await connection.getPartData(message[0], parts[j]).catch(() => { return false; });
                 parsedMessage.html = partData;
             } else if(parts[j].subtype.toUpperCase() == 'PLAIN') {
-                let partData = await connection.getPartData(message[0], parts[j]).catch(() => { return null; });
+                let partData = await connection.getPartData(message[0], parts[j]).catch(() => { return false; });
                 parsedMessage.text = partData;
             }
         }
@@ -255,9 +276,7 @@ class MailManager {
         return await connection.search([["UID", mailId + ""]], {
             bodies: ['HEADER.FIELDS (FROM TO SUBJECT CC)', "TEXT"],
             struct: true,
-        }).catch(() => {
-            return false;
-        });
+        }).catch(() => { return false; });
     }
 
     async setRead(request) {
@@ -276,7 +295,7 @@ class MailManager {
         }
 
         await this.openBox(connection, box);
-        await connection.addFlags(decodeURI(request.mailId), "\\Seen");
+        await connection.addFlags(decodeURI(request.mailId), "\\Seen").catch(() => { return false; });
 
         connection.end();
         return true;
@@ -308,7 +327,7 @@ class MailManager {
             newBox = "Sent";
         }
 
-        await connection.moveMessage(decodeURI(request.mailId), newBox);
+        await connection.moveMessage(decodeURI(request.mailId), newBox).catch(() => { return false; });
 
         connection.end();
         return true;

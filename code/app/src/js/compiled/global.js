@@ -1,34 +1,54 @@
 "use strict";
-import Page from './navigation/page/page.js';
-import Store from './petite-vue/store/store.js';
-import BackButton from './navigation/buttons/backButton.js';
-import GotoButton from './navigation/buttons/gotoButton.js';
-import BottomMenuButton from './navigation/buttons/bottomMenuButton.js';
-import InformationsBox from './pages/informations/information-box.js';
-import PlanningBox from './pages/planning/planning.js';
-import infosBoxClicked from './petite-vue/dom-functions/infos-box-clicked.js';
-import openShareMenu from './petite-vue/dom-functions/open-share-menu.js';
+import Page from './new-pages/page.js';
+import Store from './singleton/store.js';
+import BackButton from './components/backButton.js';
+import GotoButton from './components/gotoButton.js';
+import BottomMenuButton from './components/bottomMenuButton.js';
+import PlanningBox from './singleton/planning.js';
 import { createApp } from '../../libs/petite-vue/petite-vue.js';
-import ClassEvent from './pages/planning/event.js';
-import MailBox from './pages/mails/mails.js';
-import MailMessage from './pages/mails/message.js';
-import Popup from './utils/popup.js';
+import ClassEvent from './components/event.js';
+import MailBox from './singleton/mails.js';
+import MailMessage from './components/message.js';
+import Popup from './components/popup.js';
+import CacheCounter from './components/cache-counter.js';
+import HomePage from './new-pages/home.js';
+import ClassEventLoader from './components/class-event-loader.js';
+import Notification from './components/notification.js';
+import NotificationPage from './new-pages/notifications.js';
+import NotificationLoader from './components/notification-loader.js';
+import FeedbackPage from './new-pages/feedback.js';
+import SettingsButton from './components/settings-button.js';
+import PageHeader from './components/page-header.js';
+import ShareAppPage from './new-pages/share-app.js';
+import PersonalizationPage from './new-pages/personalization.js';
+import StorageManager from './new-pages/storage-manager.js';
+import AddPlanningPage from './new-pages/add-planning.js';
 function initPetiteVue() {
     createApp({
         store: Store.getInstance(),
-        infosBoxClicked,
-        openShareMenu,
+        MailMessage,
+        CacheCounter,
+        Popup,
+        HomePage,
+        NotificationPage,
+        FeedbackPage,
+        ShareAppPage,
+        PersonalizationPage,
+        StorageManager,
+        AddPlanningPage,
         Page,
-        BottomMenuButton,
+        PageHeader,
         GotoButton,
         BackButton,
+        SettingsButton,
+        BottomMenuButton,
+        Notification,
+        NotificationLoader,
         ClassEvent,
-        MailMessage,
-        Popup,
+        ClassEventLoader,
     }).mount();
 }
 function main() {
-    InformationsBox.getInstance();
     PlanningBox.getInstance();
     MailBox.getInstance();
     initPetiteVue();

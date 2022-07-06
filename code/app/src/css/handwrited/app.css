@@ -77,18 +77,23 @@ a {
     text-decoration: underline;
 }
 
-/* General boxes */
-
-.box {
-    height: calc(100% - 5rem);
-    overflow-x: hidden;
-}
-
 /* Bottom menu */
 
 .bottom-menu {
     background-color: var(--color-900);
     height: 5rem;
+}
+
+/* Rotate */
+
+.rotate {
+    animation: rotate 1s linear 0s infinite;
+    transform-origin: center;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Loader */
@@ -294,7 +299,29 @@ input[type="checkbox"] ~ .checkbox:after, .switch:after {
 /* Vue style */
 
 [v-cloak] {
-    display: none
+    display: none;
+}
+
+/* Tailwind shortcut */
+
+@layer components {
+    [page] {
+        @apply absolute h-full w-full left-0 top-0 overflow-hidden duration-300;
+    }
+
+    [container] {
+        @apply relative w-full overflow-auto p-5 bg-900;
+        height: calc(100% - 5rem);
+        overflow-x: hidden;
+    }
+
+    [settings-icon] {
+        @apply w-10 h-10 m-auto;
+    }
+
+    [color-selector] {
+        @apply ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer;
+    }
 }
 
 /* Scroll bar */

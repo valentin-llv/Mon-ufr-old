@@ -1,53 +1,59 @@
-"use strict";
+"use strict"
+
+import Store from "./store.js";
+
+/* Page navigator */
+
 export default class PageNavigator {
-    static _instance = null;
-    pages = {};
-    pageHistory = ["home-page"];
-    isMoving = false;
-    closeCallback = {};
-    static getInstance() {
-        if (!PageNavigator._instance)
-            PageNavigator._instance = new PageNavigator();
+    private static _instance: PageNavigator = null;
+
+    private pages: Object = {};
+    private pageHistory: Array<string> = ["home-page"];
+    private isMoving: boolean = false;
+    private closeCallback = {};
+
+    public static getInstance(): PageNavigator {
+        if(!PageNavigator._instance) PageNavigator._instance = new PageNavigator();
         return PageNavigator._instance;
-    }
-    ;
+    };
+
     constructor() {
         this.setupWindowPageHistoryManagemenet();
-    }
-    ;
-    setupWindowPageHistoryManagemenet() {
+    };
+
+    private setupWindowPageHistoryManagemenet(): void {
         window.history.pushState({}, '');
         window.addEventListener('popstate', this.handlePopEvent);
-    }
-    ;
-    canMove() {
-        if (!this.isMoving) {
+    };
+
+    private canMove(): boolean {
+        if(!this.isMoving) {
             this.isMoving = true;
+
             setTimeout(() => {
                 this.isMoving = false;
             }, 300);
+
             return true;
-        }
-        else
-            return false;
-    }
-    ;
-    goto(pageName) {
-        if (this.canMove() && pageName != this.pageHistory[this.pageHistory.length - 1]) {
+        } else return false;
+    };
+
+    public goto(pageName: string): void {
+        if(this.canMove() && pageName != this.pageHistory[this.pageHistory.length - 1]) {
             this.dispatchAnimation(this.pages[this.pageHistory[this.pageHistory.length - 1]], this.pages[pageName], this.pages[pageName].pageAnimation, "Open");
             this.storeNewPage(pageName);
         }
-    }
-    ;
-    restartTo(pageName) {
-        if (this.canMove() && pageName != this.pageHistory[this.pageHistory.length - 1]) {
+    };
+
+    public restartTo(pageName: string): void {
+        if(this.canMove() && pageName != this.pageHistory[this.pageHistory.length - 1]) {
             this.isMoving = false;
-            if (this.pageHistory.length > 1) {
+
+            if(this.pageHistory.length > 1) {
                 this.pageHistory[0] = pageName;
-                for (let i = this.pageHistory.length - 1; i > 0; i--) {
+                for(let i = this.pageHistory.length - 1; i > 0; i--) {
                     this.back();
-                    if (i != 1)
-                        this.isMoving = false;
+                    if(i != 1) this.isMoving = false;
                 }
             }
             else {
@@ -56,35 +62,40 @@ export default class PageNavigator {
                 this.pageHistory.pop();
             }
         }
-    }
-    ;
-    back() {
-        if (this.canMove()) {
+    };
+
+    public back(): void {
+        if(this.canMove()) {
             window.history.back();
         }
-    }
-    ;
-    handlePopEvent = () => {
-        if (this.pageHistory.length > 1) {
+    };
+
+    private handlePopEvent = () => {
+        if(this.pageHistory.length > 1) {
             this.dispatchAnimation(this.pages[this.pageHistory[this.pageHistory.length - 1]], this.pages[this.pageHistory[this.pageHistory.length - 2]], this.pages[this.pageHistory[this.pageHistory.length - 1]].pageAnimation, "Close");
-            if (this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]) {
+            
+            if(this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]) {
                 this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]();
             }
             this.pageHistory.pop();
         }
-    };
-    dispatchAnimation(pageFrom, pageTo, pageAnimation, type) {
+    }
+
+    private dispatchAnimation(pageFrom: any, pageTo: any, pageAnimation: string, type: string): void {
         pageFrom.out(pageAnimation + "Out" + type);
         pageTo.in(pageAnimation + "In" + type);
     }
-    storeNewPage(pageName) {
+
+    private storeNewPage(pageName: string) {
         this.pageHistory.push(pageName);
         window.history.pushState({}, '');
     }
-    registerPage(page) {
+
+    public registerPage(page: any): void {
         this.pages[page.pageName] = page;
     }
-    registerCloseCallback(pageName, callback) {
+
+    public registerCloseCallback(pageName: string, callback: any) {
         this.closeCallback[pageName] = callback;
     }
 }
