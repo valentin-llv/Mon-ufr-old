@@ -8,6 +8,14 @@
             "title": "Nouvelle fonctionnalitée",
             "summary": "Lancement de la feature d'information.",
             "content": "<h1> Lancement de la feature d'information </h1> <p> La fonction d'information permet d'envoyer des informations aux utilisateurs </p>"
+        },
+
+        {
+            "id": 1,
+            "date": "08/05/2022",
+            "title": "Infos 2",
+            "summary": "Lancement de la feature d'information.",
+            "content": "<h1> Lancement de la feature d'information </h1> <p> La fonction d'information permet d'envoyer des informations aux utilisateurs </p>"
         }
     ]
 }

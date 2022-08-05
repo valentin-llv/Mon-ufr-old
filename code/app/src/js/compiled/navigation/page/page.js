@@ -4,12 +4,14 @@ export default function Page(props) {
     return {
         pageName: props.pageName,
         pageAnimation: props.pageAnimation,
-        hidden: props.hidden,
-        displayState: props.hidden == true ? "none" : "block",
+        displayState: props.hidden === false ? "block" : "none",
         opacity: 1,
         left: 0,
         mounted() {
             PageNavigator.getInstance().registerPage(this);
+            if (this.mountedCallback) {
+                this[this.mountedCallback]();
+            }
         },
         in(animationFunction) {
             this[animationFunction]();

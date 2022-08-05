@@ -43,9 +43,26 @@ export default class DataManager {
             news: {
                 newsRead: [],
             },
+            planning: {
+                urls: [],
+                eventNotes: {},
+                elementsToHide: [],
+                eventColors: {},
+            },
             settings: {
                 themeColor: "dark",
                 accentColor: "#49b583",
+                lowPerfMode: false,
+                planning: {
+                    planningTemplate: 1,
+                },
+            },
+            mail: {
+                userId: "",
+                password: "",
+                hierarchy: {
+                    "Réception": [],
+                },
             },
         };
     }

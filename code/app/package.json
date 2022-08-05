@@ -5,8 +5,11 @@
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "start": "concurrently \"npm run start:css\" \"tsc\"",
+    "start": "concurrently \"npm run start:css\" \"tsc\" \"npm run start:proxy\" \"npm run start:mails\" \"npm run start:mailSender\"",
     "start:css": "npx tailwindcss -i ./src/css/handwrited/app.css -o ./src/css/compiled/app.css --watch",
+    "start:proxy": "node ../server/proxy/proxy.js",
+    "start:mails": "",
+    "start:mailSender": "node ../server/mailSender/mailSender.js",
     "build": "npm run build:css && tsc -p",
     "build:css": "npx tailwindcss -i ./src/css/handwrited/app.css -o ./src/css/compiled/app.css --minify"
   }

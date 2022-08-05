@@ -3,8 +3,8 @@ import CacheManager from '../cache-manager/cache-manager.js';
 import Server from '../server-manager/server.js';
 export default class FetchManager {
     static _instance = null;
-    requestTimeout = 1000 * 15;
-    retryDelay = 1000 * 2;
+    requestTimeout = 1000 * 20;
+    retryDelay = 1000 * 3;
     static getInstance() {
         if (!FetchManager._instance)
             FetchManager._instance = new FetchManager();
@@ -13,10 +13,12 @@ export default class FetchManager {
     ;
     constructor() { }
     ;
-    async fetch(url, server) {
-        let result = await CacheManager.getInstance().checkCache(url, true);
-        if (result)
-            return result;
+    async fetch(url, server, options = null) {
+        if (!options || options.cache) {
+            let result = await CacheManager.getInstance().checkCache(Server.getInstance()[server] + url, true);
+            if (result)
+                return result;
+        }
         return new Promise(async (resolve) => {
             let result = false;
             let i = 0;
@@ -41,7 +43,7 @@ export default class FetchManager {
             await fetch(Server.getInstance()[server] + url).then((data) => {
                 return data.json();
             }).then((data) => {
-                CacheManager.getInstance().cacheData(url, data);
+                CacheManager.getInstance().cacheData(Server.getInstance()[server] + url, data);
                 resolve(data);
             }).catch(() => {
                 resolve(false);

@@ -50,6 +50,7 @@ body {
     font-family: "Poppins", sans-serif;
     overscroll-behavior-y: contain;
     background-color: var(--color-900);
+    color: var(--color-100);
     overflow: hidden;
 }
 
@@ -76,19 +77,23 @@ a {
     text-decoration: underline;
 }
 
-/* General boxes */
-
-.box {
-    height: calc(100% - 5rem);
-    overflow-x: hidden;
-}
-
 /* Bottom menu */
 
 .bottom-menu {
     background-color: var(--color-900);
-    border-top: 0.1px solid var(--color-300);
     height: 5rem;
+}
+
+/* Rotate */
+
+.rotate {
+    animation: rotate 1s linear 0s infinite;
+    transform-origin: center;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Loader */
@@ -102,6 +107,13 @@ a {
     border-radius: 100%;
 }
 
+.small-loader {
+    width: 2rem;
+    height: 2rem;
+    margin-top: 2rem;
+    margin-right: 0.5rem;
+}
+
 .ring-loader div {
     box-sizing: border-box;
     display: block;
@@ -111,6 +123,12 @@ a {
     border: 0.6rem solid var(--color-100);
     border-radius: 100%;
     border-color: var(--color-100) var(--color-700) var(--color-700) var(--color-700);
+}
+
+.small-loader div {
+    width: 2rem;
+    height: 2rem;
+    border-width: 0.4rem;
 }
 
 /* Box loading */
@@ -138,31 +156,27 @@ a {
     height: 11px;
     width: 11px;
     border: 2px solid var(--color-900);
-    box-shadow: 0px 0px 0px 2px var(--color-accent);
+    box-shadow: 0px 0px 0px 2px var(--el-color-accent);
     box-sizing: border-box;
     margin-top: 4px;
-    margin-left: -3px;
+    margin-left: 3px;
 }
 
 .planning-bar {
     height: calc(100% - 35px);
     margin-top: 23px;
-    margin-left: -7px;
+    margin-left: -1px;
     width: 3px;
     border-radius: 9999px;
 }
 
 /* Toggle button */
 
-input[type="checkbox"]:checked ~ span {
+input[type="checkbox"]:checked ~ .checkbox {
     background-color: var(--color-accent);
 }
 
-input[type="checkbox"] ~ span {
-    background-color: var(--color-600);
-}
-
-input[type="checkbox"] ~ span:after {
+input[type="checkbox"] ~ .checkbox:after, .switch:after {
     background-color: var(--color-100);
 }
 
@@ -185,6 +199,19 @@ input[type="checkbox"] ~ span:after {
 /* Used to apply the box shadow based on the current color theme */
 
 .event-box-shadow::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    top: 5px;
+    left: 5px;
+    background-color: transparent;
+    border-radius: 3px;
+    opacity: 0.7;
+    box-shadow: 0px 0px 0px 10px var(--el-color-accent);
+}
+
+.element-box-shadow::before {
     content: "";
     position: absolute;
     width: calc(100% - 10px);
@@ -247,6 +274,10 @@ input[type="checkbox"] ~ span:after {
     border-color: var(--color-accent);
 }
 
+.border-700 {
+    border-color: var(--color-700);
+}
+
 .border-100 {
     border-color: var(--color-100);
 }
@@ -254,6 +285,10 @@ input[type="checkbox"] ~ span:after {
 .text-normalxl {
     font-size: 1.375rem;
     line-height: 1.875rem;
+}
+
+.w-30 {
+    width: 7.5rem;
 }
 
 /* Used to disable animation if low perf mode is active */
@@ -264,7 +299,29 @@ input[type="checkbox"] ~ span:after {
 /* Vue style */
 
 [v-cloak] {
-    display: none
+    display: none;
+}
+
+/* Tailwind shortcut */
+
+@layer components {
+    [page] {
+        @apply absolute h-full w-full left-0 top-0 overflow-hidden duration-300;
+    }
+
+    [container] {
+        @apply relative w-full overflow-auto p-5 bg-900;
+        height: calc(100% - 5rem);
+        overflow-x: hidden;
+    }
+
+    [settings-icon] {
+        @apply w-10 h-10 m-auto;
+    }
+
+    [color-selector] {
+        @apply ml-3 mr-3 h-10 w-10 rounded-full border-4 border-100 cursor-pointer;
+    }
 }
 
 /* Scroll bar */

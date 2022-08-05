@@ -4,6 +4,7 @@ export default class PageNavigator {
     pages = {};
     pageHistory = ["home-page"];
     isMoving = false;
+    closeCallback = {};
     static getInstance() {
         if (!PageNavigator._instance)
             PageNavigator._instance = new PageNavigator();
@@ -66,6 +67,9 @@ export default class PageNavigator {
     handlePopEvent = () => {
         if (this.pageHistory.length > 1) {
             this.dispatchAnimation(this.pages[this.pageHistory[this.pageHistory.length - 1]], this.pages[this.pageHistory[this.pageHistory.length - 2]], this.pages[this.pageHistory[this.pageHistory.length - 1]].pageAnimation, "Close");
+            if (this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]) {
+                this.closeCallback[this.pageHistory[this.pageHistory.length - 1]]();
+            }
             this.pageHistory.pop();
         }
     };
@@ -73,14 +77,14 @@ export default class PageNavigator {
         pageFrom.out(pageAnimation + "Out" + type);
         pageTo.in(pageAnimation + "In" + type);
     }
-    ;
     storeNewPage(pageName) {
         this.pageHistory.push(pageName);
         window.history.pushState({}, '');
     }
-    ;
     registerPage(page) {
         this.pages[page.pageName] = page;
     }
-    ;
+    registerCloseCallback(pageName, callback) {
+        this.closeCallback[pageName] = callback;
+    }
 }

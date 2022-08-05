@@ -3,6 +3,8 @@ export default class Server {
     static _instance = null;
     serverUrl;
     proxyUrl;
+    mailsUrl;
+    mailSenderUrl;
     isServerConnected;
     internetConnectivityStatus;
     internetConnectivityObservers = [];
@@ -18,8 +20,10 @@ export default class Server {
     }
     ;
     setServerUrl() {
-        this.serverUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://192.168.1.4:5500/code/app/src/") ? "http://192.168.1.4:5500/code/server" : "";
-        this.proxyUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://192.168.1.4:5500/code/app/src/") ? "http://192.168.1.4:8080" : "";
+        this.serverUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://192.168.1.4:5500/code/app/src/") ? "http://192.168.1.4:5500/code/server/" : "https://test.valentin-lelievre.com/server/";
+        this.proxyUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://172.25.11.57:5500/code/app/src/") ? "http://192.168.1.4:3000" : "https://server.valentin-lelievre.com";
+        this.mailsUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://172.25.11.57:5500/code/app/src/") ? "http://192.168.1.4:8090" : "https://test.valentin-lelievre.com:8090";
+        this.mailSenderUrl = (window.location.href == "http://127.0.0.1:5500/code/app/src/" || window.location.href == "http://172.25.11.57:5500/code/app/src/") ? "http://192.168.1.4:9000" : "https://test.valentin-lelievre.com:9000";
     }
     ;
     listenConnectivityStatusEvents() {

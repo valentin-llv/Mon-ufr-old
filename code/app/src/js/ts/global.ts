@@ -2,113 +2,41 @@
 
 /* Importing code */
 
-import Page from './navigation/page/page.js';
+import Page from './new-pages/page.js';
+import Store from './singleton/store.js';
 
-import BackButton from './navigation/buttons/backButton.js';
-import GotoButton from './navigation/buttons/gotoButton.js';
-import BottomMenuButton from './navigation/buttons/bottomMenuButton.js';
-import InformationsBox from './pages/informations/information-box.js';
+import BackButton from './components/back-button.js';
+import GotoButton from './components/goto-button.js';
+import BottomMenuButton from './components/bottom-menu-button.js';
+
+import PlanningBox from './singleton/planning.js';
 
 /* Importing Petite Vue */
 
 import { createApp } from '../../libs/petite-vue/petite-vue.js';
-import PageNavigator from './navigation/pageNavigator/pageNavigator.js';
-import DataManager from './data/data-manager/data-manager.js';
-import Store from './petite-vue/store/store.js';
-import Server from './data/server-manager/server.js';
+import ClassEvent from './components/event.js';
+import MailBox from './singleton/mails.js';
+import MailMessage from './components/message.js';
+import Popup from './components/popup.js';
+import CacheCounter from './components/cache-counter.js';
 
-/* DOM function */
+// Pages
 
-function infosBoxClicked(index) {
-    let informations = Store.getInstance().informations;
-
-    informations.currentInformation = informations.infos[index];
-    PageNavigator.getInstance().goto("notification-content-page");
-
-    setTimeout(() => {
-        if(informations.infos[index].isUnseen) {
-            informations.infos[index].isUnseen = false;
-            DataManager.getInstance().data.news.newsRead.push(informations.infos[index].id);
-            informations.infosUnseen --;
-        }
-    }, 300);
-};
-
-function openShareMenu() {
-    if(navigator.share) {
-        navigator.share({
-            title: 'Mon UFR',
-            text: 'Mon UFR la meilleur application pour  acceder à tous les services des UFR.',
-            url: 'https://ufr-planning.com/',
-        });
-    }
-}
-
-/* Planning box */
-
-// class PlanningBox {
-//     private static _instance: PlanningBox = null;
-
-//     private dataLoaded = false;
-
-//     public static getInstance(): PlanningBox {
-//         if(!PlanningBox._instance) PlanningBox._instance = new PlanningBox();
-//         return PlanningBox._instance;
-//     };
-
-//     constructor() {
-//         this.load();
-//     }
-
-//     load() {
-//         // // Data is alreay loaded, no need to load data again
-//         // if(this.dataLoaded) return false;
-
-//         // // Check if internet connexion is available
-//         // if(!Server.getInstance().isInternetConnected) {
-//         //     this.loadWithoutInternet(this.errorMessages.head1);
-
-//         //     Server.getInstance().registerInternetConnectivityStatusUpdate(this.load);
-//         //     return false;
-//         // }
-//         // // Get the requested ressources
-//         // let result = await FetchManager.getInstance().fetch(this.ressourcesPath, "serverBaseUrl");
-
-//         // // Check if result is valid
-//         // if(!result) {
-//         //     this.loadWithoutInternet(this.errorMessages.head2);
-//         //     return false;
-//         // }
-
-//         // // Fill the page with the result data
-//         // this.succes(result);
-
-//         // Data is alreay loaded, no need to load data again
-//         if(this.dataLoaded) return false;
-
-//         // Check if internet connexion is available
-//         if(!Server.getInstance().isInternetConnected) {
-//             this.loadWithoutInternet(this.errorMessages.head1);
-
-//             Server.getInstance().registerInternetConnectivityStatusUpdate(this.load);
-//             return false;
-//         }
-//         // Get the requested ressources
-//         let result = await FetchManager.getInstance().fetch(this.ressourcesPath, "serverBaseUrl");
-//     };
-
-//     private async loadWithoutInternet(reason: string): Promise<any> {
-//         let result = await CacheManager.getInstance().checkCache(this.ressourcesPath, false);
-//         if(!result) {
-//             this.informations.errorMessage = reason + " " + this.errorMessages.messageEnd;
-//             this.informations.displayLoader = false;
-
-//             return false;
-//         }
-        
-//         this.succes(result);
-//     };
-// }
+import HomePage from './new-pages/home.js';
+import ClassEventLoader from './components/class-event-loader.js';
+import Notification from './components/notification.js';
+import NotificationPage from './new-pages/notifications.js';
+import NotificationLoader from './components/notification-loader.js';
+import FeedbackPage from './new-pages/feedback.js';
+import SettingsButton from './components/settings-button.js';
+import PageHeader from './components/page-header.js';
+import ShareAppPage from './new-pages/share-app.js';
+import PersonalizationPage from './new-pages/personalization.js';
+import StorageManager from './new-pages/storage-manager.js';
+import AddPlanningPage from './new-pages/add-planning.js';
+import PageNavigator from './singleton/page-navigator.js';
+import PlanningSettingsPage from './new-pages/planning-settings.js';
+import MailsSettingsPage from './new-pages/mails-settings.js';
 
 /* Petite vue intialisation */
 
@@ -116,23 +44,51 @@ function initPetiteVue(): void {
     createApp({
         store: Store.getInstance(),
 
-        infosBoxClicked,
-        openShareMenu,
+        // Pages
+        HomePage,
+        NotificationPage,
+        FeedbackPage,
+        ShareAppPage,
+        PersonalizationPage,
+        StorageManager,
+        AddPlanningPage,
 
+        // Components
         Page,
-        BottomMenuButton,
+        PageHeader,
+
         GotoButton,
         BackButton,
+        SettingsButton,
+        BottomMenuButton,
+
+        Notification,
+        NotificationLoader,
+
+        ClassEvent,
+        ClassEventLoader,
+        PlanningSettingsPage,
+
+        MailMessage,
+        MailsSettingsPage,
+
+        Popup,
+        CacheCounter,
     }).mount();
 }
 
 /* Main function */
 
 function main(): void {
-    InformationsBox.getInstance();
-    //PlanningBox.getInstance();
+    PlanningBox.getInstance();
+    MailBox.getInstance();
 
     initPetiteVue();
+
+    window.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        PageNavigator.getInstance().back();
+    });
 }
 
 window.onload = () => {
