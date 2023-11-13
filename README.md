@@ -1,6 +1,6 @@
-# Mon ufr (en)
+# MonUFR (en)
 
-Mon ufr is an app (PWA) which allow university students of Tours, in France, to quickly acces their class timetable, mails, class content, notes ...
+MonUFR is an app (PWA) which allow university students of Tours, in France, to quickly acces their class timetable, mails, class content, notes ...
 
 ## Technologies
 
@@ -10,9 +10,9 @@ Here is the technologies I used to create the app.
 + Typescript
 + Tailwindcss
 
-# Mon ufr (fr)
+# MonUFR (fr)
 
-Une application pour les étudiants à la fac (de tours). On retrouve tous les services dont on a besoin.
+MonUFR est une application pour les étudiants à la fac de Tours. On retrouve tous les services dont on a besoin.
 
 ## Fonctionnalitées principales
 
