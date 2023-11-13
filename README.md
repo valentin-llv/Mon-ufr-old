@@ -1,6 +1,6 @@
 # Mon ufr (en)
 
-Mon ufr is an app (PWA) which allow the students of Tours, in France, to quickly acces their class timetable, mails, class content, notes ...
+Mon ufr is an app (PWA) which allow university students of Tours, in France, to quickly acces their class timetable, mails, class content, notes ...
 
 ## Technologies
 
@@ -19,9 +19,6 @@ Une application pour les étudiants à la fac (de tours). On retrouve tous les s
 L'application regroupe , au même endroit, une grande parties des services destiné aux étudiants, cela inclus:
 + avoir son emploi du temps
 + lire ses mails
-+ envoyer des mails
-+ lien avec moodle (celene) pour accéder aux cours et aux fichiers
-+ envoie de notification lors de la réception de mail
 + ...
 
 ## Technologies
